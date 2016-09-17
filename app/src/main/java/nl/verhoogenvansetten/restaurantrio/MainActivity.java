@@ -4,12 +4,17 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.ListFragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -18,6 +23,8 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+
+import layout.DetailFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,16 +35,28 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        final FragmentManager fragmentManager = getSupportFragmentManager();
+
+        //ListFragment lf = new ListFragment();
+
+        //fragmentTransaction.replace(android.R.id.content, lf);
+
+        //fragmentTransaction.commit();
+
         String[] testData1 = {"Pushing Daisies", "Better Off Ted",
                 "Twin Peaks", "Freaks and Geeks", "Orphan Black", "Walking Dead",
                 "Breaking Bad", "The 400", "Alphas", "Life on Mars", "Oz",
                 "Narcos", "South Park", "Rick and Morty", "Silicon Valley",
                 "Suits", "Halt and Catch Fire", "Elementary"};
 
+        String placeholderDescription = "This is a placeholder description for the list view. This " +
+                "description will also be passed to the Detail fragment to list below the image. " +
+                "This placeholder text will have to be replaced by a database in the future.";
+
         ListItem[] testData = new ListItem[testData1.length];
 
         for (int i = 0; i < testData1.length; i++) {
-            testData[i] = new ListItem(R.drawable.image, testData1[i]);
+            testData[i] = new ListItem(R.drawable.image, testData1[i], placeholderDescription);
         }
 
         ListAdapter theAdapter = new MyAdapter(this, testData);
@@ -53,8 +72,23 @@ public class MainActivity extends AppCompatActivity {
                         String.valueOf(((ListItem) parent.getItemAtPosition(position)).getName());
 
                 Toast.makeText(MainActivity.this, testDataPicked, Toast.LENGTH_LONG).show();
+
+                DetailFragment detailFragment = new DetailFragment();
+
+                FragmentTransaction ft = fragmentManager.beginTransaction();
+
+                ft.replace(R.id.ListFrag, detailFragment);
+
+                ft.addToBackStack(null);
+
+                ft.commit();
+
+
             }
         });
+
+
+
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);

@@ -1,6 +1,7 @@
 package nl.verhoogenvansetten.restaurantrio;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +36,13 @@ public class MyAdapter extends ArrayAdapter<ListItem> {
         ImageView theImageView = (ImageView) theView.findViewById(R.id.imageView1);
 
         theImageView.setImageResource(getItem(position).getImage());
+
+        Configuration info = getContext().getResources().getConfiguration();
+
+        if(info.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            TextView theDescription = (TextView) theView.findViewById(R.id.textView2);
+            theDescription.setText(getItem(position).getDescription());
+        }
 
         return theView;
 
