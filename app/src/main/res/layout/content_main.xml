@@ -15,5 +15,6 @@
         android:name="layout.ListFragment"
         android:id="@+id/ListFrag"
         tools:layout="@layout/fragment_list"
+
         />
 </RelativeLayout>
