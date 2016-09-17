@@ -11,6 +11,13 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.Toast;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -20,6 +27,35 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        String[] testData1 = {"Pushing Daisies", "Better Off Ted",
+                "Twin Peaks", "Freaks and Geeks", "Orphan Black", "Walking Dead",
+                "Breaking Bad", "The 400", "Alphas", "Life on Mars", "Oz",
+                "Narcos", "South Park", "Rick and Morty", "Silicon Valley",
+                "Suits", "Halt and Catch Fire", "Elementary"};
+
+        ListItem[] testData = new ListItem[testData1.length];
+
+        for (int i = 0; i < testData1.length; i++) {
+            testData[i] = new ListItem(R.drawable.image, testData1[i]);
+        }
+
+        ListAdapter theAdapter = new MyAdapter(this, testData);
+
+        ListView theListView = (ListView) findViewById(R.id.restList);
+
+        theListView.setAdapter(theAdapter);
+
+        theListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String testDataPicked = "You selected " +
+                        String.valueOf(((ListItem) parent.getItemAtPosition(position)).getName());
+
+                Toast.makeText(MainActivity.this, testDataPicked, Toast.LENGTH_LONG).show();
+            }
+        });
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
