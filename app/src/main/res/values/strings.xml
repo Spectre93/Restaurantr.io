@@ -3,5 +3,7 @@
     <string name="action_settings">Settings</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="fragment_detail_restaurant_title">Placeholder title</string>
+    <string name="fragment_detail_restaurant_picture_description">Picture of the restaurant</string>
+    <string name="fragment_detail_restaurant_summary">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin sit amet sapien libero. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Maecenas in interdum enim. Nunc bibendum luctus scelerisque. Cras viverra lacinia ante at finibus. Etiam sit amet erat in nisl vehicula lobortis. Pellentesque nisl lacus, efficitur in tellus id, mollis accumsan dolor. Nunc sit amet euismod dolor. Proin quis fringilla sem. Phasellus venenatis sed ante ut faucibus. Cras tincidunt dolor eget odio convallis vehicula. Nunc nec metus erat. Cras blandit, urna pharetra aliquam mollis, nisl neque tincidunt justo, quis aliquam lacus massa consequat purus.</string>
 </resources>
