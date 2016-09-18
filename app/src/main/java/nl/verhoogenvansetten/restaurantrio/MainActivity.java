@@ -1,5 +1,6 @@
 package nl.verhoogenvansetten.restaurantrio;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -7,12 +8,15 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -62,10 +66,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 dialog();
-               // Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
             }
         });
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -89,15 +93,27 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void dialog(){
-        AlertDialog.Builder alertDialogBuilder = new  AlertDialog.Builder(this);
-        alertDialogBuilder.setMessage("Add your favorite restaurant");
-        alertDialogBuilder.setPositiveButton("Check", new DialogInterface.OnClickListener(){
-            public void onClick(DialogInterface dialog, int id){
+    public void AddDialog() {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        Context context = getApplicationContext();
+        LayoutInflater inflater = (LayoutInflater)context.getSystemService(LAYOUT_INFLATER_SERVICE);
+        View view = inflater.inflate(R.layout.add_dialog, (ViewGroup)findViewById(R.id.addDialogLayout));
+        alertDialogBuilder.setView(view);
+
+        alertDialogBuilder.setTitle("Add your favorite restaurant");
+        final EditText input = (EditText) view.findViewById(R.id.addInput);
+        alertDialogBuilder.setView(view);
+        alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+               // result.setText(input.getText().toString());
                 dialog.dismiss();
             }
         });
-
+        alertDialogBuilder.setNegativeButton("Cancel",new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                dialog.cancel();
+            }
+        });
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
     }
