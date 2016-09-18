@@ -1,4 +1,4 @@
-package layout;
+package nl.verhoogenvansetten.restaurantrio;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

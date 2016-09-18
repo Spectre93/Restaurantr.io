@@ -3,8 +3,6 @@ package nl.verhoogenvansetten.restaurantrio;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
@@ -14,19 +12,15 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-
-import layout.DetailFragment;
-
 public class MainActivity extends AppCompatActivity {
+
+    MyListFragment lf;
+    ListView list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,68 +29,29 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        lf = new MyListFragment();
+
         final FragmentManager fragmentManager = getSupportFragmentManager();
 
-        //ListFragment lf = new ListFragment();
+        if (findViewById(R.id.contentMain) != null) {
+            if (savedInstanceState != null)
+                return;
 
-        //fragmentTransaction.replace(android.R.id.content, lf);
+            FragmentTransaction fragTrans = fragmentManager.beginTransaction();
 
-        //fragmentTransaction.commit();
+            fragTrans.add(R.id.contentMain, lf);
 
-        String[] testData1 = {"Pushing Daisies", "Better Off Ted",
-                "Twin Peaks", "Freaks and Geeks", "Orphan Black", "Walking Dead",
-                "Breaking Bad", "The 400", "Alphas", "Life on Mars", "Oz",
-                "Narcos", "South Park", "Rick and Morty", "Silicon Valley",
-                "Suits", "Halt and Catch Fire", "Elementary"};
-
-        String placeholderDescription = "This is a placeholder description for the list view. This " +
-                "description will also be passed to the Detail fragment to list below the image. " +
-                "This placeholder text will have to be replaced by a database in the future.";
-
-        ListItem[] testData = new ListItem[testData1.length];
-
-        for (int i = 0; i < testData1.length; i++) {
-            testData[i] = new ListItem(R.drawable.image, testData1[i], placeholderDescription);
+            fragTrans.commit();
         }
 
-        ListAdapter theAdapter = new MyAdapter(this, testData);
-
-        ListView theListView = (ListView) findViewById(R.id.restList);
-
-        theListView.setAdapter(theAdapter);
-
-        theListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String testDataPicked = "You selected " +
-                        String.valueOf(((ListItem) parent.getItemAtPosition(position)).getName());
-
-                Toast.makeText(MainActivity.this, testDataPicked, Toast.LENGTH_LONG).show();
-
-                DetailFragment detailFragment = new DetailFragment();
-
-                FragmentTransaction ft = fragmentManager.beginTransaction();
-
-                ft.replace(R.id.ListFrag, detailFragment);
-
-                ft.addToBackStack(null);
-
-                ft.commit();
-
-
-            }
-        });
-
-
-
-
+        list = lf.getList();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 dialog();
-               // Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                // Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
             }
         });
     }
@@ -123,11 +78,11 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void dialog(){
-        AlertDialog.Builder alertDialogBuilder = new  AlertDialog.Builder(this);
+    public void dialog() {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setMessage("Add your favorite restaurant");
-        alertDialogBuilder.setPositiveButton("Check", new DialogInterface.OnClickListener(){
-            public void onClick(DialogInterface dialog, int id){
+        alertDialogBuilder.setPositiveButton("Check", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
                 dialog.dismiss();
             }
         });

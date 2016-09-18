@@ -1,22 +1,15 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_height="match_parent"
-    android:layout_width="match_parent"
-    android:id="@+id/listFragContent"
-    >
-
-<ScrollView
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="layout.ListFragment"
+    tools:context=".MyListFragment"
     android:fillViewport="true"
+    android:id="@+id/listFrag"
     >
 
-    <!-- TODO: Update blank fragment layout -->
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/restList"></ListView>
 
 </ScrollView>
-</FrameLayout>
