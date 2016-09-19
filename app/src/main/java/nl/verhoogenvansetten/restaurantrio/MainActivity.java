@@ -2,6 +2,7 @@ package nl.verhoogenvansetten.restaurantrio;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
@@ -50,6 +51,14 @@ public class MainActivity extends AppCompatActivity {
 
         list = lf.getList();
 
+        list.setOnLongClickListener(new View.OnLongClickListener() {
+                    public boolean onLongClick(View view) {
+                        EditDialog();
+                        return true;
+                    }
+                }
+        );
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,6 +66,8 @@ public class MainActivity extends AppCompatActivity {
                 AddDialog();
             }
         });
+
+
     }
 
     @Override
@@ -82,20 +93,28 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void AddDialog() {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         Context context = getApplicationContext();
         LayoutInflater inflater = (LayoutInflater)context.getSystemService(LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.add_dialog, (ViewGroup)findViewById(R.id.addDialogLayout));
         alertDialogBuilder.setView(view);
 
         alertDialogBuilder.setTitle("Add your favorite restaurant");
-        alertDialogBuilder.setMessage("Write the name");
-        final EditText input = (EditText) view.findViewById(R.id.addInput);
-        alertDialogBuilder.setView(view);
+        alertDialogBuilder.setMessage("Enter the name of restaurant");
+        final EditText title = (EditText) view.findViewById(R.id.addInput);
+
         alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
-                //result.setText(input.getText().toString());
-                dialog.dismiss();
+                if(title.getText().toString().length()==0){
+                    Toast.makeText(MainActivity.this, "Pleas enter the name", Toast.LENGTH_SHORT).show();
+                    alertDialogBuilder.setCancelable(false);
+                }
+                else {
+                    String str =title.getText().toString();
+                    Intent intent = new Intent(getApplicationContext(), AddData.class);
+                    intent.putExtra("input", str);
+                    startActivity(intent);
+                }
             }
         });
         alertDialogBuilder.setNegativeButton("Cancel",new DialogInterface.OnClickListener() {
@@ -115,8 +134,8 @@ public class MainActivity extends AppCompatActivity {
         alertDialogBuilder.setView(input);
         alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
-
-                dialog.dismiss();
+               // Intent i = new Intent(getContext(), ItemSelection.class);
+               // startActivity(i);
             }
         });
         alertDialogBuilder.setNegativeButton("Cancel",new DialogInterface.OnClickListener() {
