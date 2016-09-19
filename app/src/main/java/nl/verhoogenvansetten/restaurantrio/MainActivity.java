@@ -89,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
         alertDialogBuilder.setView(view);
 
         alertDialogBuilder.setTitle("Add your favorite restaurant");
+        alertDialogBuilder.setMessage("Write the name");
         final EditText input = (EditText) view.findViewById(R.id.addInput);
         alertDialogBuilder.setView(view);
         alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -106,9 +107,31 @@ public class MainActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
+    public void EditDialog() {
+        final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setTitle("Edit your favorite restaurant");
+        alertDialogBuilder.setMessage("Are you going to edit this?");
+        final EditText input = new EditText(this);
+        alertDialogBuilder.setView(input);
+        alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+
+                dialog.dismiss();
+            }
+        });
+        alertDialogBuilder.setNegativeButton("Cancel",new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                dialog.cancel();
+            }
+        });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
+
     public void DeleteDialog() {
         final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setTitle("Delete your favorite restaurant");
+        alertDialogBuilder.setMessage("Are you sure?");
         alertDialogBuilder.setPositiveButton("Cancel",new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 dialog.cancel();
