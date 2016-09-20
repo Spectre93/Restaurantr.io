@@ -51,14 +51,14 @@ public class MainActivity extends AppCompatActivity {
 
         list = lf.getList();
 
-        list.setOnLongClickListener(new View.OnLongClickListener() {
+       /* list.setOnLongClickListener(new View.OnLongClickListener() {
                     public boolean onLongClick(View view) {
                         EditDialog();
                         return true;
                     }
                 }
         );
-
+*/
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
