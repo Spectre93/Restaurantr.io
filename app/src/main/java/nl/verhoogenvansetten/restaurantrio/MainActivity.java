@@ -1,26 +1,22 @@
 package nl.verhoogenvansetten.restaurantrio;
 
-import android.content.Context;
+import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.app.ListFragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -51,14 +47,6 @@ public class MainActivity extends AppCompatActivity {
 
         list = lf.getList();
 
-       /* list.setOnLongClickListener(new View.OnLongClickListener() {
-                    public boolean onLongClick(View view) {
-                        EditDialog();
-                        return true;
-                    }
-                }
-        );
-*/
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,8 +54,6 @@ public class MainActivity extends AppCompatActivity {
                 AddDialog();
             }
         });
-
-
     }
 
     @Override
@@ -93,15 +79,32 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void AddDialog() {
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.custom_dialog);
+        dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+        dialog.setCancelable(false);
+        dialog.setTitle("Add your favorite restaurant");
+
+        final EditText title = (EditText) dialog.findViewById(R.id.title);
+        title.setHint("Put the name of restaurant");
+
+        final Button checkButton = (Button) dialog.findViewById(R.id.checkButton);
+        checkButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+
+
+        /*
         final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         Context context = getApplicationContext();
         LayoutInflater inflater = (LayoutInflater)context.getSystemService(LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(R.layout.add_dialog, (ViewGroup)findViewById(R.id.addDialogLayout));
         alertDialogBuilder.setView(view);
-
-        alertDialogBuilder.setTitle("Add your favorite restaurant");
-        alertDialogBuilder.setMessage("Enter the name of restaurant");
-        final EditText title = (EditText) view.findViewById(R.id.addInput);
 
         alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
@@ -122,8 +125,7 @@ public class MainActivity extends AppCompatActivity {
                 dialog.cancel();
             }
         });
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
+   */
     }
 
     public void EditDialog() {
@@ -134,8 +136,6 @@ public class MainActivity extends AppCompatActivity {
         alertDialogBuilder.setView(input);
         alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
-               // Intent i = new Intent(getContext(), ItemSelection.class);
-               // startActivity(i);
             }
         });
         alertDialogBuilder.setNegativeButton("Cancel",new DialogInterface.OnClickListener() {

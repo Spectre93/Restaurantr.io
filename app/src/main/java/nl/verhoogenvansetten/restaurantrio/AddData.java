@@ -25,11 +25,10 @@ public class AddData extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.add_data);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        input = (EditText) findViewById(R.id.input);
 
         Bundle intent = getIntent().getExtras();
         input.setText(intent.getString("input"));
