@@ -74,7 +74,6 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -88,6 +87,8 @@ public class MainActivity extends AppCompatActivity {
 
         final EditText title = (EditText) dialog.findViewById(R.id.title);
         title.setHint("Put the name of restaurant");
+        final EditText content = (EditText) dialog.findViewById(R.id.content);
+        title.setHint("Explaining about the restaurant");
 
         final Button checkButton = (Button) dialog.findViewById(R.id.checkButton);
         checkButton.setOnClickListener(new View.OnClickListener() {
@@ -98,34 +99,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
         dialog.show();
-
-
-        /*
-        final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        Context context = getApplicationContext();
-        LayoutInflater inflater = (LayoutInflater)context.getSystemService(LAYOUT_INFLATER_SERVICE);
-        alertDialogBuilder.setView(view);
-
-        alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                if(title.getText().toString().length()==0){
-                    Toast.makeText(MainActivity.this, "Pleas enter the name", Toast.LENGTH_SHORT).show();
-                    alertDialogBuilder.setCancelable(false);
-                }
-                else {
-                    String str =title.getText().toString();
-                    Intent intent = new Intent(getApplicationContext(), AddData.class);
-                    intent.putExtra("input", str);
-                    startActivity(intent);
-                }
-            }
-        });
-        alertDialogBuilder.setNegativeButton("Cancel",new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                dialog.cancel();
-            }
-        });
-   */
     }
 
     public void EditDialog() {
@@ -162,7 +135,6 @@ public class MainActivity extends AppCompatActivity {
                 dialog.dismiss();
             }
         });
-
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
     }
