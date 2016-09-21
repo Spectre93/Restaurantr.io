@@ -36,9 +36,7 @@ public class RestaurantDetailActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Snackbar.make(view, "Replace with your own detail action", Snackbar.LENGTH_LONG)
-                //        .setAction("Action", null).show();
-                editDialog();
+                openEditDialog();
             }
         });
 
@@ -62,8 +60,8 @@ public class RestaurantDetailActivity extends AppCompatActivity {
         }
     }
 
-    public void editDialog() {
-        final Dialog dialog = new Dialog(this);
+    public void openEditDialog() {
+        /*final Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.custom_dialog);
         dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
@@ -81,10 +79,10 @@ public class RestaurantDetailActivity extends AppCompatActivity {
                 //
                 dialog.dismiss();
             }
-        });
+        });*/
     }
 
-    public void deleteDialog() {
+    /*public void deleteDialog() {
         final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setTitle("Delete your favorite restaurant");
         alertDialogBuilder.setMessage("Are you sure?");
@@ -102,7 +100,7 @@ public class RestaurantDetailActivity extends AppCompatActivity {
 
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
-    }
+    }*/
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
