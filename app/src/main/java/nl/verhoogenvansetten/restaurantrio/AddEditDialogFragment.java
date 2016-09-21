@@ -31,7 +31,7 @@ public class AddEditDialogFragment extends DialogFragment {
     private static final String TAG = "AddEditDialogFragment";
     private OnFragmentInteractionListener mListener;
 
-    ImageView ivCamera, ivGallery, ivUpload, ivImage;
+    ImageView imageView;
 
     CameraPhoto cameraPhoto;
     GalleryPhoto galleryPhoto;
@@ -215,7 +215,7 @@ public class AddEditDialogFragment extends DialogFragment {
                 String photoPath = cameraPhoto.getPhotoPath();
                 try {
                     Bitmap bitmap = ImageLoader.init().from(photoPath).requestSize(512, 512).getBitmap();
-                    ivImage.setImageBitmap(bitmap);
+                    imageView.setImageBitmap(bitmap);
                 } catch (FileNotFoundException e) {
                     Toast.makeText(getContext().getApplicationContext(), "Something Wrong while loading photos", Toast.LENGTH_SHORT).show();
                 }
@@ -227,7 +227,7 @@ public class AddEditDialogFragment extends DialogFragment {
                 String photoPath = galleryPhoto.getPath();
                 try {
                     Bitmap bitmap = ImageLoader.init().from(photoPath).requestSize(512, 512).getBitmap();
-                    ivImage.setImageBitmap(bitmap);
+                    imageView.setImageBitmap(bitmap);
                 } catch (FileNotFoundException e) {
                     Toast.makeText(getContext().getApplicationContext(), "Something Wrong while choosing photos", Toast.LENGTH_SHORT).show();
                 }

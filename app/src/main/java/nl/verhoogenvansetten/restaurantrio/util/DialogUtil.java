@@ -12,7 +12,7 @@ import nl.verhoogenvansetten.restaurantrio.AddEditDialogFragment;
 
 public class DialogUtil {
     public static void openAddDialog(FragmentManager fragmentManager, String title) {
-        AddEditDialogFragment addFragment = AddEditDialogFragment.newInstance(title, false);
+        AddEditDialogFragment addFragment = AddEditDialogFragment.newInstance(title,true);
         addFragment.show(fragmentManager, "add_edit_fragment");
         //FragmentTransaction transaction = fragmentManager.beginTransaction();
         //transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
@@ -20,7 +20,7 @@ public class DialogUtil {
     }
 
     public static void openEditDialog(FragmentManager fragmentManager, String title, String name, String location, String description, byte[] image) {
-        AddEditDialogFragment addFragment = AddEditDialogFragment.newInstance(title, name, location, description, image, true);
+        AddEditDialogFragment addFragment = AddEditDialogFragment.newInstance(title, name, location, description, image);
         addFragment.show(fragmentManager, "add_edit_fragment");
         //FragmentTransaction transaction = fragmentManager.beginTransaction();
         //transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
