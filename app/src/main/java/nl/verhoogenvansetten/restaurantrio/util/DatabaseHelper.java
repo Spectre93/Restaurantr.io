@@ -179,12 +179,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return restaurants;
     }
 
-    public static boolean editRestaurant(int id, String name, String location, String description, byte[] image){
+    public static boolean editRestaurant(int id, String name, String location, String description, Bitmap image){
         ContentValues contentValues = new ContentValues();
         contentValues.put(COLUMN_RESTAURANT_NAME, name);
         contentValues.put(COLUMN_RESTAURANT_LOCATION, location);
         contentValues.put(COLUMN_RESTAURANT_DESCRIPTION, description);
-        contentValues.put(COLUMN_RESTAURANT_IMAGE, image);
+        contentValues.put(COLUMN_RESTAURANT_IMAGE, DbBitmapUtility.getBytes(image));
         String whereClause = COLUMN_RESTAURANT_ID + " = ?";
         String[] whereArgs = new String[]{ Integer.toString(id) };
         int result = db.update(TABLE_RESTAURANT, contentValues, whereClause, whereArgs);
