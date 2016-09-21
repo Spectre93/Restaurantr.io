@@ -19,8 +19,8 @@ public class DialogUtil {
         //transaction.add(android.R.id.content, addFragment, "add_edit_fragment").addToBackStack(null).commit();
     }
 
-    public static void openEditDialog(FragmentManager fragmentManager, String title, String name, String location, byte[] image) {
-        AddEditDialogFragment addFragment = AddEditDialogFragment.newInstance(title, name, location, image, true);
+    public static void openEditDialog(FragmentManager fragmentManager, String title, String name, String location, String description, byte[] image) {
+        AddEditDialogFragment addFragment = AddEditDialogFragment.newInstance(title, name, location, description, image, true);
         addFragment.show(fragmentManager, "add_edit_fragment");
         //FragmentTransaction transaction = fragmentManager.beginTransaction();
         //transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);

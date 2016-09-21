@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 
+import nl.verhoogenvansetten.restaurantrio.model.Restaurant;
 import nl.verhoogenvansetten.restaurantrio.util.DialogUtil;
 
 /**
@@ -28,11 +29,17 @@ public class RestaurantDetailActivity extends AppCompatActivity implements AddEd
         Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
         setSupportActionBar(toolbar);
 
+        Restaurant rest = RestaurantListContent.ITEM_MAP.get(getIntent().getLongExtra(RestaurantDetailFragment.ARG_ITEM_ID, -1));
+        final String name = rest.getName();
+        final String location = rest.getLocation();
+        final String description = rest.getDescription();
+        final byte[] image = "lol".getBytes(); //rest.getByteArrayFromImage();
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DialogUtil.openEditDialog(getSupportFragmentManager(), getString(R.string.new_restaurant), "Cap Ouest", "The Hague", "lol".getBytes());
+                DialogUtil.openEditDialog(getSupportFragmentManager(), getString(R.string.new_restaurant), name, location, description, image);
             }
         });
 

@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import nl.verhoogenvansetten.restaurantrio.model.Restaurant;
@@ -117,7 +118,11 @@ public class RestaurantListActivity extends AppCompatActivity implements AddEdit
 
     @Override
     public boolean onQueryTextChange(String text) {
-        Toast.makeText(this, DatabaseHelper.getRestaurantList(text).get(0).getName(), Toast.LENGTH_SHORT).show();
+        ArrayList<Restaurant> res = DatabaseHelper.getRestaurantList(text);
+        Toast.makeText(this, String.valueOf(res.size()), Toast.LENGTH_SHORT).show();
+        if (res.size() != 0) {
+
+        }
         return true;
     }
 

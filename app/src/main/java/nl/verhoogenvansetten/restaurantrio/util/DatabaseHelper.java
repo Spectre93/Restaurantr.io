@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -108,7 +109,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Returns the entire list of restaurants
     public static ArrayList<Restaurant> getRestaurantList(){
-        ArrayList<Restaurant> restaurants = null;
+        ArrayList<Restaurant> restaurants = new ArrayList<>();
         String[] columns = {
                 COLUMN_RESTAURANT_ID,
                 COLUMN_RESTAURANT_NAME,
@@ -131,7 +132,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             }
         } catch (Exception e){
             //todo error handling
-        }finally {
+        } finally {
             cursor.close();
         }
         return restaurants;
@@ -179,12 +180,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return restaurants;
     }
 
-    public static boolean editRestaurant(int id, String name, String location, String description, Bitmap image){
+    public static boolean editRestaurant(int id, String name, String location, String description, byte[] image){
         ContentValues contentValues = new ContentValues();
         contentValues.put(COLUMN_RESTAURANT_NAME, name);
         contentValues.put(COLUMN_RESTAURANT_LOCATION, location);
         contentValues.put(COLUMN_RESTAURANT_DESCRIPTION, description);
-        contentValues.put(COLUMN_RESTAURANT_IMAGE, DbBitmapUtility.getBytes(image));
+        contentValues.put(COLUMN_RESTAURANT_IMAGE, image);
         String whereClause = COLUMN_RESTAURANT_ID + " = ?";
         String[] whereArgs = new String[]{ Integer.toString(id) };
         int result = db.update(TABLE_RESTAURANT, contentValues, whereClause, whereArgs);

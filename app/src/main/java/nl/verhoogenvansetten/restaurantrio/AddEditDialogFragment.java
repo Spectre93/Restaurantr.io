@@ -31,12 +31,13 @@ public class AddEditDialogFragment extends DialogFragment {
         return frag;
     }
 
-    public static AddEditDialogFragment newInstance(String title, String name, String location, byte[] image, boolean isEdit) {
+    public static AddEditDialogFragment newInstance(String title, String name, String location, String description, byte[] image, boolean isEdit) {
         AddEditDialogFragment frag = new AddEditDialogFragment();
         Bundle args = new Bundle();
         args.putString("title", title);
         args.putString("name", name);
         args.putString("location", location);
+        args.putString("description", description);
         args.putByteArray("image", image);
         AddEditDialogFragment.isEdit = isEdit;
         frag.setArguments(args);
@@ -100,6 +101,11 @@ public class AddEditDialogFragment extends DialogFragment {
         TextInputEditText mETxtLocation = (TextInputEditText) content.findViewById(R.id.etxt_restaurant_location);
         if ((mLocation = args.getString("location")) != null)
             mETxtLocation.setText(mLocation);
+
+        String mDescription;
+        TextInputEditText mETxtDescription = (TextInputEditText) content.findViewById(R.id.etxt_restaurant_description);
+        if ((mDescription = args.getString("description")) != null)
+            mETxtDescription.setText(mDescription);
 
         // Add action buttons
         builder.setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {

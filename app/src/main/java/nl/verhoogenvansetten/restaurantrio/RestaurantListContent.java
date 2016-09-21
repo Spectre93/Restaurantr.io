@@ -11,14 +11,14 @@ import nl.verhoogenvansetten.restaurantrio.util.DatabaseHelper;
 public class RestaurantListContent {
 
     // The array of restaurants
-    public static final List<Restaurant> ITEMS;
+    public static final List<Restaurant> ITEMS = new ArrayList<>();
 
     // A map of sample (dummy) items, by ID.
     public static final Map<Long, Restaurant> ITEM_MAP = new HashMap<Long, Restaurant>();
 
     static {
         //TODO remove debug when database works
-        boolean debug = true;
+        boolean debug = false;
         if(debug){
             String[] testData = {"Pushing Daisies", "Better Off Ted",
                     "Twin Peaks", "Freaks and Geeks", "Orphan Black", "Walking Dead",
@@ -31,12 +31,14 @@ public class RestaurantListContent {
                     "description will also be passed to the Detail fragment to list below the image. " +
                     "This placeholder text will have to be replaced by a database in the future.";
 
-            ITEMS = new ArrayList<Restaurant>();
             for (int i = 0; i < testData.length; i++) {
                 addItem(new Restaurant(i, testData[i], location, description, null));
             }
         }else{
-            ITEMS = DatabaseHelper.getRestaurantList();
+            List<Restaurant> itemList = DatabaseHelper.getRestaurantList();
+            for (Restaurant r : itemList) {
+                addItem(r);
+            }
         }
     }
 
