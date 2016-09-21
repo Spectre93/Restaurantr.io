@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -53,8 +52,8 @@ public class RestaurantDetailActivity extends AppCompatActivity {
         // If it is null, make a new fragment and add it using a transaction
         if (savedInstanceState == null) {
             Bundle arguments = new Bundle();
-            arguments.putString(RestaurantDetailFragment.ARG_ITEM_NAME,
-                    getIntent().getStringExtra(RestaurantDetailFragment.ARG_ITEM_NAME));
+            arguments.putString(RestaurantDetailFragment.ARG_ITEM_ID,
+                    getIntent().getStringExtra(RestaurantDetailFragment.ARG_ITEM_ID));
             RestaurantDetailFragment fragment = new RestaurantDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()

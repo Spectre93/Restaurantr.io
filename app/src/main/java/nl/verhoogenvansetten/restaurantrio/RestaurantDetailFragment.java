@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import nl.verhoogenvansetten.restaurantrio.model.Restaurant;
+
 /**
  * A fragment representing a single Restaurant detail screen.
  * This fragment is either contained in a {@link RestaurantListActivity}
@@ -17,10 +19,10 @@ import android.widget.TextView;
  */
 public class RestaurantDetailFragment extends Fragment {
     // The fragment argument representing the item name that this fragment represents.
-    public static final String ARG_ITEM_NAME = "item_name";
+    public static final String ARG_ITEM_ID = "item_id";
 
-    // The dummy content this fragment is presenting.
-    private RestaurantListContent.RestaurantItem mItem;
+    // The restaurant this fragment is presenting.
+    private Restaurant mItem;
 
     // Mandatory empty constructor for the fragment manager to instantiate the fragment
     public RestaurantDetailFragment() {
@@ -30,16 +32,14 @@ public class RestaurantDetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getArguments().containsKey(ARG_ITEM_NAME)) {
-            // Load the dummy content specified by the fragment
-            // arguments. In a real-world scenario, use a Loader
-            // to load content from a content provider.
-            mItem = RestaurantListContent.ITEM_MAP.get(getArguments().getString(ARG_ITEM_NAME));
+        if (getArguments().containsKey(ARG_ITEM_ID)) {
+            // Load the content specified by the fragment arguments.
+            mItem = RestaurantListContent.ITEM_MAP.get(getArguments().getLong(ARG_ITEM_ID));
 
             Activity activity = this.getActivity();
             CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
             if (appBarLayout != null) {
-                appBarLayout.setTitle(mItem.name);
+                appBarLayout.setTitle(mItem.getName());
             }
         }
     }
@@ -51,7 +51,7 @@ public class RestaurantDetailFragment extends Fragment {
 
         // Show the dummy content as text in a TextView.
         if (mItem != null) {
-            ((TextView) rootView.findViewById(R.id.restaurant_detail)).setText(mItem.description);
+            ((TextView) rootView.findViewById(R.id.restaurant_detail)).setText(mItem.getDescription());
             //((ImageView) rootView.findViewById(R.id.restaurant_image)).setImageDrawable(this.getResources().getDrawable(R.drawable.paris));
         }
         return rootView;

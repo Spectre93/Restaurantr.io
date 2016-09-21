@@ -29,8 +29,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
@@ -39,6 +37,8 @@ import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.io.ByteArrayOutputStream;
 import java.util.List;
+
+import nl.verhoogenvansetten.restaurantrio.model.Restaurant;
 
 /**
  * An activity representing a list of Restaurants. This activity
@@ -128,9 +128,9 @@ public class RestaurantListActivity extends AppCompatActivity {
     public class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
-        private final List<RestaurantListContent.RestaurantItem> mValues;
+        private final List<Restaurant> mValues;
 
-        public SimpleItemRecyclerViewAdapter(List<RestaurantListContent.RestaurantItem> items) {
+        public SimpleItemRecyclerViewAdapter(List<Restaurant> items) {
             mValues = items;
         }
 
@@ -144,15 +144,15 @@ public class RestaurantListActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
             holder.mItem = mValues.get(position);
-            holder.mNameView.setText(mValues.get(position).name);
-            holder.mLocationView.setText(mValues.get(position).location);
+            holder.mNameView.setText(mValues.get(position).getName());
+            holder.mLocationView.setText(mValues.get(position).getLocation());
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (mTwoPane) {
                         Bundle arguments = new Bundle();
-                        arguments.putString(RestaurantDetailFragment.ARG_ITEM_NAME, holder.mItem.name);
+                        arguments.putLong(RestaurantDetailFragment.ARG_ITEM_ID, holder.mItem.getId());
                         RestaurantDetailFragment fragment = new RestaurantDetailFragment();
                         fragment.setArguments(arguments);
                         getSupportFragmentManager().beginTransaction()
@@ -161,7 +161,7 @@ public class RestaurantListActivity extends AppCompatActivity {
                     } else {
                         Context context = v.getContext();
                         Intent intent = new Intent(context, RestaurantDetailActivity.class);
-                        intent.putExtra(RestaurantDetailFragment.ARG_ITEM_NAME, holder.mItem.name);
+                        intent.putExtra(RestaurantDetailFragment.ARG_ITEM_ID, holder.mItem.getId());
 
                         context.startActivity(intent);
                     }
@@ -178,7 +178,7 @@ public class RestaurantListActivity extends AppCompatActivity {
             public final View mView;
             public final TextView mNameView;
             public final TextView mLocationView;
-            public RestaurantListContent.RestaurantItem mItem;
+            public Restaurant mItem;
 
             public ViewHolder(View view) {
                 super(view);
