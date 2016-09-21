@@ -21,7 +21,7 @@ public class Restaurant{
     private Bitmap image;
 
     //Constructor which is used to create new restaurant objects and adds them to the db.
-    public boolean Restaurant(Context context, String name, String location, String description, Bitmap image) {
+    public Restaurant(Context context, String name, String location, String description, Bitmap image) {
         this.name = name;
         this.location = location;
         this.description = description;
@@ -39,10 +39,8 @@ public class Restaurant{
         if (result != -1){
             //Set the id and return true
             this.id = result;
-            return true;
         }else{
             //Return false
-            return false;
         }
     }
 

@@ -139,6 +139,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Returns only the restaurants whose names match the query
     public static ArrayList<Restaurant> getRestaurantList(String query){
+        //todo implement
         return null;
     }
 
