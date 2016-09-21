@@ -15,6 +15,8 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -77,9 +79,7 @@ public class RestaurantListActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                //        .setAction("Action", null).show();
-                addDialog();
+                openAddDialog();
             }
         });
 
@@ -96,29 +96,12 @@ public class RestaurantListActivity extends AppCompatActivity {
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
-    public void addDialog() {
-        final Dialog dialog = new Dialog(this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.custom_dialog);
-        dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
-        dialog.setCancelable(false);
-        dialog.setTitle("Add your favorite restaurant");
-
-        final EditText title = (EditText) dialog.findViewById(R.id.title);
-        title.setHint("Put the name of restaurant");
-        final EditText content = (EditText) dialog.findViewById(R.id.content);
-        content.setHint("Explaining about the restaurant");
-
-        final Button checkButton = (Button) dialog.findViewById(R.id.checkButton);
-        checkButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //
-                dialog.dismiss();
-            }
-        });
-
-        dialog.show();
+    public void openAddDialog() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        AddEditDialogFragment addFragment = AddEditDialogFragment.newInstance(getString(R.string.new_restaurant));
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        transaction.add(android.R.id.content, addFragment).addToBackStack(null).commit();
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
@@ -127,7 +110,6 @@ public class RestaurantListActivity extends AppCompatActivity {
 
     public class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
-
         private final List<Restaurant> mValues;
 
         public SimpleItemRecyclerViewAdapter(List<Restaurant> items) {

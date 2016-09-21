@@ -9,4 +9,8 @@
     <string name="title_restaurant_list">Restaurants</string>
     <string name="title_restaurant_detail">Restaurant Detail</string>
     <string name="image_description">Image of the restaurant</string>
+    <string name="hint_name">Name</string>
+    <string name="save">Save</string>
+    <string name="hint_location">Location</string>
+    <string name="new_restaurant">New restaurant</string>
 </resources>
