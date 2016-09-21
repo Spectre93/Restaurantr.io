@@ -2,6 +2,7 @@ package nl.verhoogenvansetten.restaurantrio.util;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
@@ -72,8 +73,29 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         //Todo smart upgrade of database without dropping entries
     }
 
-    public static Restaurant getRestaurantById(int id){
-        return null;
+    public static Restaurant getRestaurantById(int restaurantId){
+        Restaurant restaurant;
+        String[] columns = {
+                COLUMN_RESTAURANT_ID,
+                COLUMN_RESTAURANT_NAME,
+                COLUMN_RESTAURANT_LOCATION,
+                COLUMN_RESTAURANT_DESCRIPTION,
+                COLUMN_RESTAURANT_IMAGE
+        };
+        String whereClause = COLUMN_RESTAURANT_ID + " = ?";
+        String[] whereArgs = new String[]{ Integer.toString(restaurantId) };
+        Cursor cursor = db.query(
+                TABLE_RESTAURANT,   //Table
+                columns,            //Columns to be selected
+                whereClause,        //Selection
+                whereArgs,          //Values for selection
+                null,               //Don't group the rows
+                null,               //Don't filter by row groups
+                null                //Don't sort
+                );
+        cursor.moveToFirst();
+        restaurant = DatabaseHelper.createRestaurantFromCursor(cursor);
+        return restaurant;
     }
 
     // Returns the entire list of restaurants
@@ -125,6 +147,27 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(COLUMN_RESTAURANT_IMAGE, image);
         long result = db.insert(TABLE_RESTAURANT, null, contentValues);
         return result;
+    }
+
+    private static Restaurant createRestaurantFromCursor(Cursor cursor){
+        Restaurant restaurant = null;
+        try{
+            int id = Integer.parseInt(cursor.getString(
+                    cursor.getColumnIndexOrThrow(COLUMN_RESTAURANT_ID)));
+            String name = cursor.getString(cursor.getColumnIndexOrThrow(
+                    COLUMN_RESTAURANT_NAME));
+            String location = cursor.getString(cursor.getColumnIndexOrThrow(
+                    COLUMN_RESTAURANT_LOCATION));
+            String description = cursor.getString(cursor.getColumnIndexOrThrow(
+                    COLUMN_RESTAURANT_DESCRIPTION));
+            Bitmap image = DbBitmapUtility.getImage(cursor.getBlob(cursor.getColumnIndexOrThrow(
+                    COLUMN_RESTAURANT_IMAGE)));
+            restaurant = new Restaurant(id, name, location, description, image);
+        } catch (Exception e){
+            //todo Error handling
+            return restaurant;
+        }
+        return restaurant;
     }
 
 }
