@@ -46,8 +46,8 @@ public class RestaurantDetailActivity extends AppCompatActivity implements AddEd
         // If it is null, make a new fragment and add it using a transaction
         if (savedInstanceState == null) {
             Bundle arguments = new Bundle();
-            arguments.putString(RestaurantDetailFragment.ARG_ITEM_ID,
-                    getIntent().getStringExtra(RestaurantDetailFragment.ARG_ITEM_ID));
+            arguments.putLong(RestaurantDetailFragment.ARG_ITEM_ID,
+                    getIntent().getLongExtra(RestaurantDetailFragment.ARG_ITEM_ID, -1));
             RestaurantDetailFragment fragment = new RestaurantDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
