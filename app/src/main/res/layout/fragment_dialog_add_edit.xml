@@ -106,7 +106,7 @@
         tools:layout_editor_absoluteX="152dp" />
 
 
-        </android.support.constraint.ConstraintLayout>
+</android.support.constraint.ConstraintLayout>
     <!--
         </android.support.design.widget.CoordinatorLayout>
     </android.support.v4.widget.DrawerLayout>-->
