@@ -1,21 +1,17 @@
 package nl.verhoogenvansetten.restaurantrio;
 
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.Toolbar;
-import android.view.View;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.ActionBar;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.EditText;
+import android.view.View;
+
+import nl.verhoogenvansetten.restaurantrio.util.DialogUtil;
 
 /**
  * An activity representing a single Restaurant detail screen. This
@@ -23,7 +19,7 @@ import android.widget.EditText;
  * item description are presented side-by-side with a list of items
  * in a {@link RestaurantListActivity}.
  */
-public class RestaurantDetailActivity extends AppCompatActivity {
+public class RestaurantDetailActivity extends AppCompatActivity implements AddEditDialogFragment.OnFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +32,7 @@ public class RestaurantDetailActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openEditDialog();
+                DialogUtil.openEditDialog(getSupportFragmentManager(), getString(R.string.new_restaurant), "Cap Ouest", "The Hague", "lol".getBytes());
             }
         });
 
@@ -60,48 +56,6 @@ public class RestaurantDetailActivity extends AppCompatActivity {
         }
     }
 
-    public void openEditDialog() {
-        /*final Dialog dialog = new Dialog(this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.custom_dialog);
-        dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
-        dialog.setCancelable(false);
-        dialog.setTitle("Edit your favorite restaurant");
-
-        final EditText title = (EditText) dialog.findViewById(R.id.title);
-        //title.setText("");
-        final EditText content = (EditText) dialog.findViewById(R.id.content);
-        //content.setText("");
-        final Button checkButton = (Button) dialog.findViewById(R.id.checkButton);
-        checkButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //
-                dialog.dismiss();
-            }
-        });*/
-    }
-
-    /*public void deleteDialog() {
-        final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setTitle("Delete your favorite restaurant");
-        alertDialogBuilder.setMessage("Are you sure?");
-        alertDialogBuilder.setPositiveButton("Cancel",new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                dialog.cancel();
-            }
-        });
-        alertDialogBuilder.setNegativeButton("Delete", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                //this.deleteDatabase("databasename.db");
-                dialog.dismiss();
-            }
-        });
-
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
-    }*/
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -112,4 +66,6 @@ public class RestaurantDetailActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    public void onFragmentInteraction(Uri uri) {}
 }

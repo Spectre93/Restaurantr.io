@@ -11,6 +11,7 @@
     <string name="image_description">Image of the restaurant</string>
     <string name="hint_name">Name</string>
     <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
     <string name="hint_location">Location</string>
     <string name="new_restaurant">New restaurant</string>
 </resources>
