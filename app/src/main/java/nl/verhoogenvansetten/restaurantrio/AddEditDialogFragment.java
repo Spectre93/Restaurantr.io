@@ -1,8 +1,11 @@
 package nl.verhoogenvansetten.restaurantrio;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,34 +15,46 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.Toast;
 
-import nl.verhoogenvansetten.restaurantrio.util.DatabaseHelper;
+import com.kosalgeek.android.photoutil.CameraPhoto;
+import com.kosalgeek.android.photoutil.GalleryPhoto;
+import com.kosalgeek.android.photoutil.ImageLoader;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 
 public class AddEditDialogFragment extends DialogFragment {
     private static final String TAG = "AddEditDialogFragment";
     private OnFragmentInteractionListener mListener;
-    private static boolean isEdit;
+
+    ImageView ivCamera, ivGallery, ivUpload, ivImage;
+
+    CameraPhoto cameraPhoto;
+    GalleryPhoto galleryPhoto;
+
+    final int CAMERA_REQUEST = 13323;
+    final int GALLERY_REQUEST = 22131;
 
     public AddEditDialogFragment() {}
 
-    public static AddEditDialogFragment newInstance(String title, boolean isEdit) {
+    public static AddEditDialogFragment newInstance(String title) {
         AddEditDialogFragment frag = new AddEditDialogFragment();
         Bundle args = new Bundle();
         args.putString("title", title);
-        AddEditDialogFragment.isEdit = isEdit;
         frag.setArguments(args);
         return frag;
     }
 
-    public static AddEditDialogFragment newInstance(String title, String name, String location, String description, byte[] image, boolean isEdit) {
+    public static AddEditDialogFragment newInstance(String title, String name, String location, byte[] image) {
         AddEditDialogFragment frag = new AddEditDialogFragment();
         Bundle args = new Bundle();
         args.putString("title", title);
         args.putString("name", name);
         args.putString("location", location);
-        args.putString("description", description);
         args.putByteArray("image", image);
-        AddEditDialogFragment.isEdit = isEdit;
         frag.setArguments(args);
         return frag;
     }
@@ -92,7 +107,7 @@ public class AddEditDialogFragment extends DialogFragment {
 
         Bundle args = getArguments();
 
-        final String mName;
+        String mName;
         TextInputEditText mETxtName = (TextInputEditText) content.findViewById(R.id.etxt_restaurant_name);
         if ((mName = args.getString("name")) != null)
             mETxtName.setText(mName);
@@ -102,28 +117,14 @@ public class AddEditDialogFragment extends DialogFragment {
         if ((mLocation = args.getString("location")) != null)
             mETxtLocation.setText(mLocation);
 
-        String mDescription;
-        TextInputEditText mETxtDescription = (TextInputEditText) content.findViewById(R.id.etxt_restaurant_description);
-        if ((mDescription = args.getString("description")) != null)
-            mETxtDescription.setText(mDescription);
-
         // Add action buttons
         builder.setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int id) {
-                final String name = ((TextInputEditText) getDialog().findViewById(R.id.etxt_restaurant_name)).getText().toString();
-                final String location = ((TextInputEditText) getDialog().findViewById(R.id.etxt_restaurant_location)).getText().toString();
-                final String description = ((TextInputEditText) getDialog().findViewById(R.id.etxt_restaurant_description)).getText().toString();
 
-                if (isEdit) {
-                    DatabaseHelper.editRestaurant(1, name, location, description, "lol".getBytes());
-                } else {
-                    DatabaseHelper.addRestaurant(name, location, description, "lol".getBytes());
-                }
             }
-        });
-
-        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+        })
+        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 AddEditDialogFragment.this.getDialog().dismiss();
             }
@@ -192,4 +193,45 @@ public class AddEditDialogFragment extends DialogFragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
+    public void oepnCamera(View v) {
+        try {
+            startActivityForResult(cameraPhoto.takePhotoIntent(), CAMERA_REQUEST);
+            cameraPhoto.addToGallery();
+        } catch (IOException e) {
+            Toast.makeText(getActivity().getApplicationContext(),"Something Wrong while taking photos", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void uploadImage(View v) {
+        startActivityForResult(galleryPhoto.openGalleryIntent(), GALLERY_REQUEST);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == CAMERA_REQUEST) {
+                String photoPath = cameraPhoto.getPhotoPath();
+                try {
+                    Bitmap bitmap = ImageLoader.init().from(photoPath).requestSize(512, 512).getBitmap();
+                    ivImage.setImageBitmap(bitmap);
+                } catch (FileNotFoundException e) {
+                    Toast.makeText(getContext().getApplicationContext(), "Something Wrong while loading photos", Toast.LENGTH_SHORT).show();
+                }
+
+            } else if (requestCode == GALLERY_REQUEST) {
+                Uri uri = data.getData();
+
+                galleryPhoto.setPhotoUri(uri);
+                String photoPath = galleryPhoto.getPath();
+                try {
+                    Bitmap bitmap = ImageLoader.init().from(photoPath).requestSize(512, 512).getBitmap();
+                    ivImage.setImageBitmap(bitmap);
+                } catch (FileNotFoundException e) {
+                    Toast.makeText(getContext().getApplicationContext(), "Something Wrong while choosing photos", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    }
+
 }

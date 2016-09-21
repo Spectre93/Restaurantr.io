@@ -44,11 +44,7 @@ public class RestaurantListActivity extends AppCompatActivity implements AddEdit
 
     // Whether or not the activity is in two-pane mode, i.e. running on a tablet device.
     private boolean mTwoPane;
-    private Uri fileUri;
-    String picturePath;
-    Uri selectedImage;
-    Bitmap photo;
-    String ba1;
+
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
