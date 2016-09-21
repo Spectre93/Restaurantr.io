@@ -2,6 +2,10 @@ package nl.verhoogenvansetten.restaurantrio.model;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.support.v4.content.ContextCompat;
+
+import nl.verhoogenvansetten.restaurantrio.R;
 import nl.verhoogenvansetten.restaurantrio.util.DatabaseHelper;
 import nl.verhoogenvansetten.restaurantrio.util.DbBitmapUtility;
 
@@ -22,7 +26,14 @@ public class Restaurant{
         this.name = name;
         this.location = location;
         this.description = description;
-        this.image = image;
+        //If there is a imaged added
+        if(image != null){
+            //Add the image to the Restaurant object
+            this.image = image;
+        }else{
+            //Add the default image to the Restaurant object
+            BitmapFactory.decodeResource(context.getResources(), R.drawable.image);
+        }
         DatabaseHelper dbHelper = new DatabaseHelper(context);
         long result = dbHelper.addRestaurant(this.getName(), this.getLocation(),
                 this.getDescription(), this.getByteArrayFromImage());
