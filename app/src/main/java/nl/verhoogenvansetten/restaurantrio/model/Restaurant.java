@@ -26,7 +26,7 @@ public class Restaurant{
         this.description = description;
         this.image = image;
         DatabaseHelper dbHelper = new DatabaseHelper(this.context);
-        long result = dbHelper.insertRestaurant(this.getName(), this.getLocation(),
+        long result = dbHelper.addRestaurant(this.getName(), this.getLocation(),
                 this.getDescription(), this.getByteArrayFromImage());
         //If the insert is successful
         if (result != -1){
