@@ -19,6 +19,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.appindexing.AppIndex;
@@ -171,6 +172,7 @@ public class RestaurantListActivity extends AppCompatActivity implements AddEdit
             holder.mItem = mValues.get(position);
             holder.mNameView.setText(mValues.get(position).getName());
             holder.mLocationView.setText(mValues.get(position).getLocation());
+            holder.mImageView.setImageBitmap(mValues.get(position).getImage());
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -203,6 +205,7 @@ public class RestaurantListActivity extends AppCompatActivity implements AddEdit
             public final View mView;
             public final TextView mNameView;
             public final TextView mLocationView;
+            public final ImageView mImageView;
             public Restaurant mItem;
 
             public ViewHolder(View view) {
@@ -210,6 +213,7 @@ public class RestaurantListActivity extends AppCompatActivity implements AddEdit
                 mView = view;
                 mNameView = (TextView) view.findViewById(R.id.restaurant_name);
                 mLocationView = (TextView) view.findViewById(R.id.restaurant_location);
+                mImageView = (ImageView) view.findViewById(R.id.restaurant_image);
             }
 
             @Override
