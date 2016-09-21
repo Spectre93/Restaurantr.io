@@ -41,12 +41,11 @@ import static android.app.Activity.RESULT_OK;
 public class AddEditDialogFragment extends DialogFragment {
     private static final String TAG = "AddEditDialogFragment";
     private static final int CAMERA_REQUEST = 1;
-    private OnFragmentInteractionListener mListener;
     private static boolean isEdit;
-
-    private Uri mOutputFileUri;
-
+    private static RestaurantListActivity.SimpleItemRecyclerViewAdapter adapter;
     ImageView imageView;
+    private OnFragmentInteractionListener mListener;
+    private Uri mOutputFileUri;
 
     public AddEditDialogFragment() {}
 
@@ -54,6 +53,7 @@ public class AddEditDialogFragment extends DialogFragment {
         AddEditDialogFragment frag = new AddEditDialogFragment();
         Bundle args = new Bundle();
         args.putString("title", title);
+        AddEditDialogFragment.adapter = adapter;
         AddEditDialogFragment.isEdit = isEdit;
         frag.setArguments(args);
         return frag;
@@ -164,6 +164,7 @@ public class AddEditDialogFragment extends DialogFragment {
                 } else {
                     DatabaseHelper.addRestaurant(name, location, description, image);
                 }
+                adapter.setFilter(DatabaseHelper.getRestaurantList());
             }
         });
 
