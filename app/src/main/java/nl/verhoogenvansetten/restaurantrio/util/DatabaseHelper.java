@@ -15,6 +15,13 @@ import nl.verhoogenvansetten.restaurantrio.model.Restaurant;
  */
 
 public class DatabaseHelper extends SQLiteOpenHelper {
+
+    //Singleton instance
+    private static DatabaseHelper firstInstance = null;
+
+    //Static SqliteDatabase object
+    private static SQLiteDatabase db = null;
+
     //Database version
     private static final int DATABASE_VERSION = 1;
 
@@ -38,18 +45,33 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             COLUMN_RESTAURANT_DESCRIPTION + " TEXT," +
             COLUMN_RESTAURANT_IMAGE + " BLOB);";
 
-    public DatabaseHelper(Context context) {
+    //Table delete entries statement
+    private static final String DELETE_TABLE_RESTAURANT = "DROP TABLE IF EXISTS "
+            + TABLE_RESTAURANT;
+
+
+    private DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        db = this.getWritableDatabase();
+    }
+
+    public DatabaseHelper getInstance(Context context){
+        if(firstInstance == null){
+            firstInstance = new DatabaseHelper(context);
+        }
+        return firstInstance;
     }
 
     @Override
-    public void onCreate(SQLiteDatabase sqLiteDatabase) {
-
+    public void onCreate(SQLiteDatabase db) {
+        db.execSQL(CREATE_TABLE_RESTAURANT);
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL(DELETE_TABLE_RESTAURANT);
+        onCreate(db);
+        //Todo smart upgrade of database without dropping entries
     }
 
     public static Restaurant getRestaurantById(int id){
@@ -67,8 +89,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-    public boolean editRestaurant(int id, String name, String location, String description, byte[] image){
-        SQLiteDatabase db = this.getWritableDatabase();
+    public static boolean editRestaurant(int id, String name, String location, String description, byte[] image){
         ContentValues contentValues = new ContentValues();
         contentValues.put(COLUMN_RESTAURANT_NAME, name);
         contentValues.put(COLUMN_RESTAURANT_LOCATION, location);
@@ -86,8 +107,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public boolean deleteRestaurant(int id) {
-        SQLiteDatabase db = this.getWritableDatabase();
+    public static boolean deleteRestaurant(int id) {
         String whereClause = COLUMN_RESTAURANT_ID + " = ?";
         String[] whereArgs = new String[]{ Integer.toString(id) };
         int result = db.delete(TABLE_RESTAURANT, whereClause, whereArgs);
@@ -100,8 +120,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     //Adds the restaurant to the DB, returns the id or -1 when it failed.
-    public long addRestaurant(String name, String location, String description, byte[] image){
-        SQLiteDatabase db = this.getWritableDatabase();
+    public static long addRestaurant(String name, String location, String description, byte[] image){
         ContentValues contentValues = new ContentValues();
         contentValues.put(COLUMN_RESTAURANT_NAME, name);
         contentValues.put(COLUMN_RESTAURANT_LOCATION, location);

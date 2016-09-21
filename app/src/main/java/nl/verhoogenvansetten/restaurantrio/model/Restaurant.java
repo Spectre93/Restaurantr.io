@@ -34,8 +34,7 @@ public class Restaurant{
             //Add the default image to the Restaurant object
             BitmapFactory.decodeResource(context.getResources(), R.drawable.image);
         }
-        DatabaseHelper dbHelper = new DatabaseHelper(context);
-        long result = dbHelper.addRestaurant(this.getName(), this.getLocation(),
+        long result = DatabaseHelper.addRestaurant(this.getName(), this.getLocation(),
                 this.getDescription(), this.getByteArrayFromImage());
         //If the insert is successful
         if (result != -1){
