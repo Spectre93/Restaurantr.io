@@ -21,7 +21,7 @@ public class DbBitmapUtility {
         try {
             stream.close();
         } catch (Exception e) {
-
+            // TODO Error handling
         }
         return res;
     }

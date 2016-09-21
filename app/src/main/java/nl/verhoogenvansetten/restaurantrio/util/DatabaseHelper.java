@@ -17,18 +17,10 @@ import nl.verhoogenvansetten.restaurantrio.model.Restaurant;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    //Singleton instance
-    private static DatabaseHelper firstInstance = null;
-
-    //Static SqliteDatabase object
-    private static SQLiteDatabase db = null;
-
     //Database version
     private static final int DATABASE_VERSION = 1;
-
     //Database name
     private static final String DATABASE_NAME = "restaurantrio.db";
-
     //Database table names
     private static final String TABLE_RESTAURANT = "table_restaurant";
     //Database column names for the TABLE_RESTAURANT
@@ -37,7 +29,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_RESTAURANT_LOCATION = "location";
     private static final String COLUMN_RESTAURANT_DESCRIPTION = "description";
     private static final String COLUMN_RESTAURANT_IMAGE = "image";
-
     //Table creation statement
     private static final String CREATE_TABLE_RESTAURANT = "CREATE TABLE " + TABLE_RESTAURANT + "(" +
             COLUMN_RESTAURANT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -45,10 +36,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             COLUMN_RESTAURANT_LOCATION + " TEXT," +
             COLUMN_RESTAURANT_DESCRIPTION + " TEXT," +
             COLUMN_RESTAURANT_IMAGE + " BLOB);";
-
     //Table delete entries statement
     private static final String DELETE_TABLE_RESTAURANT = "DROP TABLE IF EXISTS "
             + TABLE_RESTAURANT;
+    //Singleton instance
+    private static DatabaseHelper firstInstance = null;
+    //Static SqliteDatabase object
+    private static SQLiteDatabase db = null;
 
     private DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -59,18 +53,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if(firstInstance == null){
             firstInstance = new DatabaseHelper(context);
         }
-    }
-
-    @Override
-    public void onCreate(SQLiteDatabase db) {
-        db.execSQL(CREATE_TABLE_RESTAURANT);
-    }
-
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL(DELETE_TABLE_RESTAURANT);
-        onCreate(db);
-        //Todo smart upgrade of database without dropping entries
     }
 
     public static Restaurant getRestaurantById(int restaurantId){
@@ -210,7 +192,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     private static Restaurant createRestaurantFromCursor(Cursor cursor){
-        Restaurant restaurant = null;
         try{
             int id = Integer.parseInt(cursor.getString(
                     cursor.getColumnIndexOrThrow(COLUMN_RESTAURANT_ID)));
@@ -222,12 +203,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     COLUMN_RESTAURANT_DESCRIPTION));
             Bitmap image = DbBitmapUtility.getImage(cursor.getBlob(cursor.getColumnIndexOrThrow(
                     COLUMN_RESTAURANT_IMAGE)));
-            restaurant = new Restaurant(id, name, location, description, image);
+            return new Restaurant(id, name, location, description, image);
         } catch (Exception e){
-            //todo Error handling
-            return restaurant;
+            // TODO Error handling
+            return null;
         }
-        return restaurant;
+    }
+
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        db.execSQL(CREATE_TABLE_RESTAURANT);
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL(DELETE_TABLE_RESTAURANT);
+        onCreate(db);
+        //Todo smart upgrade of database without dropping entries
     }
 
 }

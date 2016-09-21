@@ -41,14 +41,14 @@ import nl.verhoogenvansetten.restaurantrio.util.DialogUtil;
  */
 public class RestaurantListActivity extends AppCompatActivity implements AddEditDialogFragment.OnFragmentInteractionListener, SearchView.OnQueryTextListener {
 
-    // Whether or not the activity is in two-pane mode, i.e. running on a tablet device.
-    private boolean mTwoPane;
-    private SimpleItemRecyclerViewAdapter adapter;
-    private Uri fileUri;
     String picturePath;
     Uri selectedImage;
     Bitmap photo;
     String ba1;
+    // Whether or not the activity is in two-pane mode, i.e. running on a tablet device.
+    private boolean mTwoPane;
+    private SimpleItemRecyclerViewAdapter adapter;
+    private Uri fileUri;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -156,7 +156,7 @@ public class RestaurantListActivity extends AppCompatActivity implements AddEdit
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
         private List<Restaurant> mValues;
 
-        public SimpleItemRecyclerViewAdapter(List<Restaurant> items) {
+        SimpleItemRecyclerViewAdapter(List<Restaurant> items) {
             mValues = items;
         }
 
@@ -201,14 +201,20 @@ public class RestaurantListActivity extends AppCompatActivity implements AddEdit
             return mValues.size();
         }
 
-        public class ViewHolder extends RecyclerView.ViewHolder {
-            public final View mView;
-            public final TextView mNameView;
-            public final TextView mLocationView;
-            public final ImageView mImageView;
-            public Restaurant mItem;
+        void setFilter(List<Restaurant> restaurants) {
+            mValues.clear();
+            mValues.addAll(restaurants);
+            notifyDataSetChanged();
+        }
 
-            public ViewHolder(View view) {
+        class ViewHolder extends RecyclerView.ViewHolder {
+            final View mView;
+            final TextView mNameView;
+            final TextView mLocationView;
+            final ImageView mImageView;
+            Restaurant mItem;
+
+            ViewHolder(View view) {
                 super(view);
                 mView = view;
                 mNameView = (TextView) view.findViewById(R.id.restaurant_name);
@@ -220,12 +226,6 @@ public class RestaurantListActivity extends AppCompatActivity implements AddEdit
             public String toString() {
                 return super.toString() + " '" + mLocationView.getText() + "'";
             }
-        }
-
-        public void setFilter(List<Restaurant> restaurants) {
-            mValues.clear();
-            mValues.addAll(restaurants);
-            notifyDataSetChanged();
         }
     }
 }

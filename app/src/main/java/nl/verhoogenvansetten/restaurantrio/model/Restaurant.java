@@ -38,8 +38,6 @@ public class Restaurant{
         if (result != -1){
             //Set the id and return true
             this.id = result;
-        }else{
-            //Return false
         }
     }
 
