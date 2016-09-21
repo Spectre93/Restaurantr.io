@@ -13,7 +13,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,17 +20,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import nl.verhoogenvansetten.restaurantrio.model.Restaurant;
-import nl.verhoogenvansetten.restaurantrio.util.DialogUtil;
 import nl.verhoogenvansetten.restaurantrio.util.DatabaseHelper;
+import nl.verhoogenvansetten.restaurantrio.util.DialogUtil;
 
 /**
  * An activity representing a list of Restaurants. This activity
@@ -66,7 +63,7 @@ public class RestaurantListActivity extends AppCompatActivity implements AddEdit
         Intent intent = getIntent();
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
-            // Do search here fam
+            // Will probably not use this; only when the user presses the 'enter' button on the keyboard
         }
 
         //Initialize the database with the current context.
@@ -80,7 +77,7 @@ public class RestaurantListActivity extends AppCompatActivity implements AddEdit
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DialogUtil.openAddDialog(getSupportFragmentManager(), getString(R.string.new_restaurant));
+                DialogUtil.openAddDialog(getSupportFragmentManager(), getString(R.string.new_restaurant), adapter);
             }
         });
 
@@ -95,6 +92,12 @@ public class RestaurantListActivity extends AppCompatActivity implements AddEdit
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        adapter.setFilter(DatabaseHelper.getRestaurantList());
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {

@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
-import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -180,45 +179,34 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return restaurants;
     }
 
-    public static boolean editRestaurant(int id, String name, String location, String description, byte[] image){
+    public static boolean editRestaurant(int id, String name, String location, String description, Bitmap image){
         ContentValues contentValues = new ContentValues();
         contentValues.put(COLUMN_RESTAURANT_NAME, name);
         contentValues.put(COLUMN_RESTAURANT_LOCATION, location);
         contentValues.put(COLUMN_RESTAURANT_DESCRIPTION, description);
-        contentValues.put(COLUMN_RESTAURANT_IMAGE, image);
+        contentValues.put(COLUMN_RESTAURANT_IMAGE, DbBitmapUtility.getBytes(image));
         String whereClause = COLUMN_RESTAURANT_ID + " = ?";
         String[] whereArgs = new String[]{ Integer.toString(id) };
         int result = db.update(TABLE_RESTAURANT, contentValues, whereClause, whereArgs);
         //If the amount of rows updated is 1 return true
-        if(result == 1){
-            return true;
-        }
-        else{
-            return false;
-        }
+        return result == 1;
     }
 
     public static boolean deleteRestaurant(int id) {
         String whereClause = COLUMN_RESTAURANT_ID + " = ?";
         String[] whereArgs = new String[]{ Integer.toString(id) };
         int result = db.delete(TABLE_RESTAURANT, whereClause, whereArgs);
-        if(result == 1){
-            return true;
-        }
-        else{
-            return false;
-        }
+        return result == 1;
     }
 
     //Adds the restaurant to the DB, returns the id or -1 when it failed.
-    public static long addRestaurant(String name, String location, String description, byte[] image){
+    public static long addRestaurant(String name, String location, String description, Bitmap image){
         ContentValues contentValues = new ContentValues();
         contentValues.put(COLUMN_RESTAURANT_NAME, name);
         contentValues.put(COLUMN_RESTAURANT_LOCATION, location);
         contentValues.put(COLUMN_RESTAURANT_DESCRIPTION, description);
-        contentValues.put(COLUMN_RESTAURANT_IMAGE, image);
-        long result = db.insert(TABLE_RESTAURANT, null, contentValues);
-        return result;
+        contentValues.put(COLUMN_RESTAURANT_IMAGE, DbBitmapUtility.getBytes(image));
+        return db.insert(TABLE_RESTAURANT, null, contentValues);
     }
 
     private static Restaurant createRestaurantFromCursor(Cursor cursor){

@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 
 import nl.verhoogenvansetten.restaurantrio.model.Restaurant;
 import nl.verhoogenvansetten.restaurantrio.util.DialogUtil;
@@ -21,6 +22,7 @@ import nl.verhoogenvansetten.restaurantrio.util.DialogUtil;
  * in a {@link RestaurantListActivity}.
  */
 public class RestaurantDetailActivity extends AppCompatActivity implements AddEditDialogFragment.OnFragmentInteractionListener {
+    ImageView ivToolbarImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +35,10 @@ public class RestaurantDetailActivity extends AppCompatActivity implements AddEd
         final String name = rest.getName();
         final String location = rest.getLocation();
         final String description = rest.getDescription();
-        final byte[] image = "lol".getBytes(); //rest.getByteArrayFromImage();
+        final byte[] image = rest.getByteArrayFromImage();
+
+        ivToolbarImage = (ImageView) findViewById(R.id.iv_toolbar_image);
+        ivToolbarImage.setImageBitmap(rest.getImage());
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {

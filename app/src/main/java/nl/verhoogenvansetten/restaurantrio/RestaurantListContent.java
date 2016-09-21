@@ -9,6 +9,7 @@ import nl.verhoogenvansetten.restaurantrio.model.Restaurant;
 import nl.verhoogenvansetten.restaurantrio.util.DatabaseHelper;
 
 public class RestaurantListContent {
+    private static final String TAG = "RestaurantListContent";
 
     // The array of restaurants
     public static final List<Restaurant> ITEMS = new ArrayList<>();

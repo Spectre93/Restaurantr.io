@@ -1,8 +1,8 @@
 package nl.verhoogenvansetten.restaurantrio;
 
 import android.app.Activity;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,7 +52,6 @@ public class RestaurantDetailFragment extends Fragment {
         // Show the dummy content as text in a TextView.
         if (mItem != null) {
             ((TextView) rootView.findViewById(R.id.restaurant_detail)).setText(mItem.getDescription());
-            //((ImageView) rootView.findViewById(R.id.restaurant_image)).setImageDrawable(this.getResources().getDrawable(R.drawable.paris));
         }
         return rootView;
     }

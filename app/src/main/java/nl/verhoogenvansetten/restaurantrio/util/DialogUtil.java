@@ -2,17 +2,17 @@ package nl.verhoogenvansetten.restaurantrio.util;
 
 
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 
 import nl.verhoogenvansetten.restaurantrio.AddEditDialogFragment;
+import nl.verhoogenvansetten.restaurantrio.RestaurantListActivity;
 
 /**
  * Created by Bas on 21-9-2016.
  */
 
 public class DialogUtil {
-    public static void openAddDialog(FragmentManager fragmentManager, String title) {
-        AddEditDialogFragment addFragment = AddEditDialogFragment.newInstance(title,true);
+    public static void openAddDialog(FragmentManager fragmentManager, String title, RestaurantListActivity.SimpleItemRecyclerViewAdapter adapter) {
+        AddEditDialogFragment addFragment = AddEditDialogFragment.newInstance(title, false, adapter);
         addFragment.show(fragmentManager, "add_edit_fragment");
         //FragmentTransaction transaction = fragmentManager.beginTransaction();
         //transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
@@ -20,7 +20,7 @@ public class DialogUtil {
     }
 
     public static void openEditDialog(FragmentManager fragmentManager, String title, String name, String location, String description, byte[] image) {
-        AddEditDialogFragment addFragment = AddEditDialogFragment.newInstance(title, name, location, description, image);
+        AddEditDialogFragment addFragment = AddEditDialogFragment.newInstance(title, name, location, description, image, true);
         addFragment.show(fragmentManager, "add_edit_fragment");
         //FragmentTransaction transaction = fragmentManager.beginTransaction();
         //transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);

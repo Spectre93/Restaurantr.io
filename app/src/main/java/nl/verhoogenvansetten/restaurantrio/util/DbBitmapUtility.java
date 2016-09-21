@@ -17,7 +17,13 @@ public class DbBitmapUtility {
     public static byte[] getBytes(Bitmap bitmap) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 0, stream);
-        return stream.toByteArray();
+        byte[] res = stream.toByteArray();
+        try {
+            stream.close();
+        } catch (Exception e) {
+
+        }
+        return res;
     }
 
     // convert from byte array to bitmap

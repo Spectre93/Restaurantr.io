@@ -3,7 +3,6 @@ package nl.verhoogenvansetten.restaurantrio.model;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.support.v4.content.ContextCompat;
 
 import nl.verhoogenvansetten.restaurantrio.R;
 import nl.verhoogenvansetten.restaurantrio.util.DatabaseHelper;
@@ -34,7 +33,7 @@ public class Restaurant{
             BitmapFactory.decodeResource(context.getResources(), R.drawable.image);
         }
         long result = DatabaseHelper.addRestaurant(this.getName(), this.getLocation(),
-                this.getDescription(), this.getByteArrayFromImage());
+                this.getDescription(), this.getImage());
         //If the insert is successful
         if (result != -1){
             //Set the id and return true
