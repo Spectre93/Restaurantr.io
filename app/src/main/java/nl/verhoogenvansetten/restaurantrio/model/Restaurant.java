@@ -11,7 +11,6 @@ import nl.verhoogenvansetten.restaurantrio.util.DbBitmapUtility;
 
 
 public class Restaurant{
-    private Context context;
     private long id;
     private String name;
     private String location;
@@ -20,12 +19,11 @@ public class Restaurant{
 
     //Constructor which is used to create new restaurant objects and adds them to the db.
     public Restaurant(Context context, String name, String location, String description, Bitmap image) {
-        this.context = context;
         this.name = name;
         this.location = location;
         this.description = description;
         this.image = image;
-        DatabaseHelper dbHelper = new DatabaseHelper(this.context);
+        DatabaseHelper dbHelper = new DatabaseHelper(context);
         long result = dbHelper.addRestaurant(this.getName(), this.getLocation(),
                 this.getDescription(), this.getByteArrayFromImage());
         //If the insert is successful
@@ -34,21 +32,15 @@ public class Restaurant{
         }else{
             //// TODO: 21-9-2016  
         }
-
     }
 
     //Constructor which is used to load existing restaurant objects from the DB.
-    public Restaurant(Context context, int id, String name, String location, String description, Bitmap image) {
-        this.context = context;
+    public Restaurant(int id, String name, String location, String description, Bitmap image) {
         this.id = id;
         this.name = name;
         this.location = location;
         this.description = description;
         this.image = image;
-    }
-
-    public Context getContext(){
-        return this.context;
     }
 
     public long getId() {
