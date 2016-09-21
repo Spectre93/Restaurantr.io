@@ -1,46 +1,27 @@
 package nl.verhoogenvansetten.restaurantrio;
 
-import android.app.Activity;
-import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Base64;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
 
-import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 import nl.verhoogenvansetten.restaurantrio.model.Restaurant;
+import nl.verhoogenvansetten.restaurantrio.util.DialogUtil;
 import nl.verhoogenvansetten.restaurantrio.util.DatabaseHelper;
 
 /**
@@ -51,7 +32,7 @@ import nl.verhoogenvansetten.restaurantrio.util.DatabaseHelper;
  * item description. On tablets, the activity presents the list of items and
  * item description side-by-side using two vertical panes.
  */
-public class RestaurantListActivity extends AppCompatActivity {
+public class RestaurantListActivity extends AppCompatActivity implements AddEditDialogFragment.OnFragmentInteractionListener {
 
     // Whether or not the activity is in two-pane mode, i.e. running on a tablet device.
     private boolean mTwoPane;
@@ -82,7 +63,7 @@ public class RestaurantListActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openAddDialog();
+                DialogUtil.openAddDialog(getSupportFragmentManager(), getString(R.string.new_restaurant));
             }
         });
 
@@ -99,17 +80,11 @@ public class RestaurantListActivity extends AppCompatActivity {
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
-    public void openAddDialog() {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        AddEditDialogFragment addFragment = AddEditDialogFragment.newInstance(getString(R.string.new_restaurant));
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-        transaction.add(android.R.id.content, addFragment).addToBackStack(null).commit();
-    }
-
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
         recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(RestaurantListContent.ITEMS));
     }
+
+    public void onFragmentInteraction(Uri uri) {}
 
     public class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
