@@ -93,14 +93,48 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 null,               //Don't filter by row groups
                 null                //Don't sort
                 );
-        cursor.moveToFirst();
-        restaurant = DatabaseHelper.createRestaurantFromCursor(cursor);
+        try{
+            cursor.moveToFirst();
+            restaurant = DatabaseHelper.createRestaurantFromCursor(cursor);
+        } catch (Exception e){
+            //todo error handling
+            restaurant = null;
+        }finally {
+            cursor.close();
+        }
+
         return restaurant;
     }
 
     // Returns the entire list of restaurants
     public static ArrayList<Restaurant> getRestaurantList(){
-        return null;
+        ArrayList<Restaurant> restaurants = null;
+        String[] columns = {
+                COLUMN_RESTAURANT_ID,
+                COLUMN_RESTAURANT_NAME,
+                COLUMN_RESTAURANT_LOCATION,
+                COLUMN_RESTAURANT_DESCRIPTION,
+                COLUMN_RESTAURANT_IMAGE
+        };
+        Cursor cursor = db.query(
+                TABLE_RESTAURANT,   //Table
+                columns,            //Columns to be selected
+                null,               //Selection
+                null,               //Values for selection
+                null,               //Don't group the rows
+                null,               //Don't filter by row groups
+                null                //Don't sort
+        );
+        try{
+            while(cursor.moveToNext()){
+                restaurants.add(DatabaseHelper.createRestaurantFromCursor(cursor));
+            }
+        } catch (Exception e){
+            //todo error handling
+        }finally {
+            cursor.close();
+        }
+        return restaurants;
     }
 
     // Returns only the restaurants whose names match the query
