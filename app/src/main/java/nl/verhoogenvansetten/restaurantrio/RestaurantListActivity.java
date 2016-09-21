@@ -1,14 +1,25 @@
 package nl.verhoogenvansetten.restaurantrio;
 
+import android.app.Activity;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.support.design.widget.FloatingActionButton;
+import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,10 +27,17 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.appindexing.Thing;
+import com.google.android.gms.common.api.GoogleApiClient;
+
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 /**
@@ -34,6 +52,17 @@ public class RestaurantListActivity extends AppCompatActivity {
 
     // Whether or not the activity is in two-pane mode, i.e. running on a tablet device.
     private boolean mTwoPane;
+    private Uri fileUri;
+    String picturePath;
+    Uri selectedImage;
+    Bitmap photo;
+    String ba1;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
+    //public static String URL = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +91,9 @@ public class RestaurantListActivity extends AppCompatActivity {
         if (findViewById(R.id.restaurant_detail_container) != null) {
             mTwoPane = true;
         }
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     public void addDialog() {
@@ -75,12 +107,13 @@ public class RestaurantListActivity extends AppCompatActivity {
         final EditText title = (EditText) dialog.findViewById(R.id.title);
         title.setHint("Put the name of restaurant");
         final EditText content = (EditText) dialog.findViewById(R.id.content);
-        title.setHint("Explaining about the restaurant");
+        content.setHint("Explaining about the restaurant");
 
         final Button checkButton = (Button) dialog.findViewById(R.id.checkButton);
         checkButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //
                 dialog.dismiss();
             }
         });
