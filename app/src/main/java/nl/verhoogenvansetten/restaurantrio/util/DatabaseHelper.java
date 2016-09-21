@@ -4,6 +4,11 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Bitmap;
+
+import java.util.ArrayList;
+
+import nl.verhoogenvansetten.restaurantrio.model.Restaurant;
 
 /**
  * Created by Jori on 20-9-2016.
@@ -47,8 +52,31 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
+    public static Restaurant getRestaurantById(int id){
+        return null;
+    }
+
+    // Returns the entire list of restaurants
+    public static ArrayList<Restaurant> getRestaurantList(){
+        return null;
+    }
+
+    // Returns only the restaurants whose names match the query
+    public static ArrayList<Restaurant> getRestaurantList(String query){
+        return null;
+    }
+
+
+    public static boolean editRestaurant(int id, String name, String location, String description, Bitmap image){
+        return false;
+    }
+
+    public static boolean deleteRestaurant(int id) {
+        return false;
+    }
+
     //Adds the restaurant to the DB, returns the id or -1 when it failed.
-    public long insertRestaurant(String name, String location, String description, byte[] image){
+    public long addRestaurant(String name, String location, String description, byte[] image){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(COLUMN_RESTAURANT_NAME, name);

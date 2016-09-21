@@ -2,9 +2,6 @@ package nl.verhoogenvansetten.restaurantrio.model;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.support.v4.content.ContextCompat;
-
-import nl.verhoogenvansetten.restaurantrio.R;
 import nl.verhoogenvansetten.restaurantrio.util.DatabaseHelper;
 import nl.verhoogenvansetten.restaurantrio.util.DbBitmapUtility;
 
@@ -86,10 +83,6 @@ public class Restaurant{
         return image;
     }
 
-    public byte[] getByteArrayFromImage(){
-        return DbBitmapUtility.getBytes(this.getImage());
-    }
-
     public void setImage(Bitmap image) {
         this.image = image;
     }
@@ -98,20 +91,14 @@ public class Restaurant{
         this.image = DbBitmapUtility.getImage(image);
     }
 
-
-
-
-    private int id;
-    private String name;
-    private String location;
-    private String description;
-    private Blob image;
-
-    public Restaurant(int id, String name, String location, String description, Blob image){
-        this.id = id;
-        this.name = name;
-        this.location = location;
-        this.description = description;
-        this.image = image;
+    public byte[] getByteArrayFromImage(){
+        return DbBitmapUtility.getBytes(this.getImage());
     }
+
+
+
+
+
+
+
 }
