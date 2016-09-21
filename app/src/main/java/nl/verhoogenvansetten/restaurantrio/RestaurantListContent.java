@@ -17,7 +17,6 @@ public class RestaurantListContent {
     public static final Map<Long, Restaurant> ITEM_MAP = new HashMap<Long, Restaurant>();
 
     static {
-        //TODO remove debug when database works
         boolean debug = false;
         if(debug){
             String[] testData = {"Pushing Daisies", "Better Off Ted",
@@ -45,5 +44,14 @@ public class RestaurantListContent {
     private static void addItem(Restaurant item) {
         ITEMS.add(item);
         ITEM_MAP.put(item.getId(), item);
+    }
+
+    public static void replaceAll(List<Restaurant> itemList) {
+        ITEMS.clear();
+        ITEM_MAP.clear();
+
+        for (Restaurant r : itemList) {
+            addItem(r);
+        }
     }
 }
