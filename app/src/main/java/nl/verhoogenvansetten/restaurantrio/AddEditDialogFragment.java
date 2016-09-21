@@ -13,27 +13,32 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import nl.verhoogenvansetten.restaurantrio.util.DatabaseHelper;
+
 public class AddEditDialogFragment extends DialogFragment {
     private static final String TAG = "AddEditDialogFragment";
     private OnFragmentInteractionListener mListener;
+    private static boolean isEdit;
 
     public AddEditDialogFragment() {}
 
-    public static AddEditDialogFragment newInstance(String title) {
+    public static AddEditDialogFragment newInstance(String title, boolean isEdit) {
         AddEditDialogFragment frag = new AddEditDialogFragment();
         Bundle args = new Bundle();
         args.putString("title", title);
+        AddEditDialogFragment.isEdit = isEdit;
         frag.setArguments(args);
         return frag;
     }
 
-    public static AddEditDialogFragment newInstance(String title, String name, String location, byte[] image) {
+    public static AddEditDialogFragment newInstance(String title, String name, String location, byte[] image, boolean isEdit) {
         AddEditDialogFragment frag = new AddEditDialogFragment();
         Bundle args = new Bundle();
         args.putString("title", title);
         args.putString("name", name);
         args.putString("location", location);
         args.putByteArray("image", image);
+        AddEditDialogFragment.isEdit = isEdit;
         frag.setArguments(args);
         return frag;
     }
@@ -86,7 +91,7 @@ public class AddEditDialogFragment extends DialogFragment {
 
         Bundle args = getArguments();
 
-        String mName;
+        final String mName;
         TextInputEditText mETxtName = (TextInputEditText) content.findViewById(R.id.etxt_restaurant_name);
         if ((mName = args.getString("name")) != null)
             mETxtName.setText(mName);
@@ -100,10 +105,19 @@ public class AddEditDialogFragment extends DialogFragment {
         builder.setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int id) {
+                final String name = ((TextInputEditText) getDialog().findViewById(R.id.etxt_restaurant_name)).getText().toString();
+                final String location = ((TextInputEditText) getDialog().findViewById(R.id.etxt_restaurant_location)).getText().toString();
+                final String description = ((TextInputEditText) getDialog().findViewById(R.id.etxt_restaurant_description)).getText().toString();
 
+                if (isEdit) {
+                    DatabaseHelper.editRestaurant(1, name, location, description, "lol".getBytes());
+                } else {
+                    DatabaseHelper.addRestaurant(name, location, description, "lol".getBytes());
+                }
             }
-        })
-        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+        });
+
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 AddEditDialogFragment.this.getDialog().dismiss();
             }

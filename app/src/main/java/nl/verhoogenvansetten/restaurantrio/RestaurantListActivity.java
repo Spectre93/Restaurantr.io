@@ -1,5 +1,6 @@
 package nl.verhoogenvansetten.restaurantrio;
 
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -7,13 +8,19 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -32,7 +39,7 @@ import nl.verhoogenvansetten.restaurantrio.util.DatabaseHelper;
  * item description. On tablets, the activity presents the list of items and
  * item description side-by-side using two vertical panes.
  */
-public class RestaurantListActivity extends AppCompatActivity implements AddEditDialogFragment.OnFragmentInteractionListener {
+public class RestaurantListActivity extends AppCompatActivity implements AddEditDialogFragment.OnFragmentInteractionListener, SearchView.OnQueryTextListener {
 
     // Whether or not the activity is in two-pane mode, i.e. running on a tablet device.
     private boolean mTwoPane;
@@ -52,6 +59,13 @@ public class RestaurantListActivity extends AppCompatActivity implements AddEdit
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restaurant_list);
+
+        Intent intent = getIntent();
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            // Do search here fam
+        }
+
         //Initialize the database with the current context.
         DatabaseHelper.initDatabase(this);
 
@@ -82,6 +96,45 @@ public class RestaurantListActivity extends AppCompatActivity implements AddEdit
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
         recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(RestaurantListContent.ITEMS));
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
+        searchView.setOnQueryTextListener(this);
+
+        // Assumes current Activity is the searchable Activity
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setIconifiedByDefault(true); // Do not iconify, rather expand the widget by default
+        searchView.setQueryRefinementEnabled(true);
+
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String text) {
+        Toast.makeText(this, DatabaseHelper.getRestaurantList(text).get(0).getName(), Toast.LENGTH_SHORT).show();
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                // startActivity(new Intent(this, SettingsActivity.class));
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     public void onFragmentInteraction(Uri uri) {}

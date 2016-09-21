@@ -148,7 +148,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             name = "default";
         }
 
-        ArrayList<Restaurant> restaurants = null;
+        ArrayList<Restaurant> restaurants = new ArrayList<>();
         String[] columns = {
                 COLUMN_RESTAURANT_ID,
                 COLUMN_RESTAURANT_NAME,
