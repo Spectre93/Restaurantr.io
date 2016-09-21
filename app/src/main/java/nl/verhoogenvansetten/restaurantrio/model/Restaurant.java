@@ -13,7 +13,6 @@ import nl.verhoogenvansetten.restaurantrio.util.DbBitmapUtility;
  * Created by Jori on 20-9-2016.
  */
 
-
 public class Restaurant{
     private long id;
     private String name;
@@ -99,11 +98,5 @@ public class Restaurant{
     public byte[] getByteArrayFromImage(){
         return DbBitmapUtility.getBytes(this.getImage());
     }
-
-
-
-
-
-
 
 }

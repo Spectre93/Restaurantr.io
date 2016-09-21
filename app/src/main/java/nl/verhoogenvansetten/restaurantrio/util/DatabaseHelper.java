@@ -49,17 +49,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DELETE_TABLE_RESTAURANT = "DROP TABLE IF EXISTS "
             + TABLE_RESTAURANT;
 
-
     private DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         db = this.getWritableDatabase();
     }
 
-    public DatabaseHelper getInstance(Context context){
+    public static void initDatabase(Context context){
         if(firstInstance == null){
             firstInstance = new DatabaseHelper(context);
         }
-        return firstInstance;
     }
 
     @Override
@@ -87,7 +85,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static ArrayList<Restaurant> getRestaurantList(String query){
         return null;
     }
-
 
     public static boolean editRestaurant(int id, String name, String location, String description, byte[] image){
         ContentValues contentValues = new ContentValues();
