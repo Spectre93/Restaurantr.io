@@ -138,9 +138,45 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // Returns only the restaurants whose names match the query
-    public static ArrayList<Restaurant> getRestaurantList(String query){
-        //todo implement
-        return null;
+    public static ArrayList<Restaurant> getRestaurantList(String name){
+        //If name is null or the length is smaller then 1 set a default value.
+        if (name != null){
+            if(name.length() < 1){
+                name = "default";
+            }
+        } else {
+            name = "default";
+        }
+
+        ArrayList<Restaurant> restaurants = null;
+        String[] columns = {
+                COLUMN_RESTAURANT_ID,
+                COLUMN_RESTAURANT_NAME,
+                COLUMN_RESTAURANT_LOCATION,
+                COLUMN_RESTAURANT_DESCRIPTION,
+                COLUMN_RESTAURANT_IMAGE
+        };
+        String whereClause = COLUMN_RESTAURANT_NAME + " LIKE ?";
+        String[] whereArgs = new String[]{"%" + name + "%"};
+        Cursor cursor = db.query(
+                TABLE_RESTAURANT,   //Table
+                columns,            //Columns to be selected
+                whereClause,        //Selection
+                whereArgs,          //Values for selection
+                null,               //Don't group the rows
+                null,               //Don't filter by row groups
+                null                //Don't sort
+        );
+        try{
+            while(cursor.moveToNext()){
+                restaurants.add(DatabaseHelper.createRestaurantFromCursor(cursor));
+            }
+        } catch (Exception e){
+            //todo error handling
+        }finally {
+            cursor.close();
+        }
+        return restaurants;
     }
 
     public static boolean editRestaurant(int id, String name, String location, String description, byte[] image){
