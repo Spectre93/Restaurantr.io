@@ -67,12 +67,36 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-    public static boolean editRestaurant(int id, String name, String location, String description, Bitmap image){
-        return false;
+    public boolean editRestaurant(int id, String name, String location, String description, byte[] image){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COLUMN_RESTAURANT_NAME, name);
+        contentValues.put(COLUMN_RESTAURANT_LOCATION, location);
+        contentValues.put(COLUMN_RESTAURANT_DESCRIPTION, description);
+        contentValues.put(COLUMN_RESTAURANT_IMAGE, image);
+        String whereClause = COLUMN_RESTAURANT_ID + " = ?";
+        String[] whereArgs = new String[]{ Integer.toString(id) };
+        int result = db.update(TABLE_RESTAURANT, contentValues, whereClause, whereArgs);
+        //If the amount of rows updated is 1 return true
+        if(result == 1){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 
-    public static boolean deleteRestaurant(int id) {
-        return false;
+    public boolean deleteRestaurant(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String whereClause = COLUMN_RESTAURANT_ID + " = ?";
+        String[] whereArgs = new String[]{ Integer.toString(id) };
+        int result = db.delete(TABLE_RESTAURANT, whereClause, whereArgs);
+        if(result == 1){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 
     //Adds the restaurant to the DB, returns the id or -1 when it failed.

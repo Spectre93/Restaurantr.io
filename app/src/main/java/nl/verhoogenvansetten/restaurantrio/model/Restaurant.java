@@ -39,9 +39,11 @@ public class Restaurant{
                 this.getDescription(), this.getByteArrayFromImage());
         //If the insert is successful
         if (result != -1){
+            //Set the id and return true
             this.id = result;
             return true;
         }else{
+            //Return false
             return false;
         }
     }
