@@ -1,10 +1,10 @@
 package nl.verhoogenvansetten.restaurantrio;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -12,6 +12,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
 
 /**
@@ -49,8 +52,8 @@ public class RestaurantDetailActivity extends AppCompatActivity {
         // If it is null, make a new fragment and add it using a transaction
         if (savedInstanceState == null) {
             Bundle arguments = new Bundle();
-            arguments.putString(RestaurantDetailFragment.ARG_ITEM_NAME,
-                    getIntent().getStringExtra(RestaurantDetailFragment.ARG_ITEM_NAME));
+            arguments.putString(RestaurantDetailFragment.ARG_ITEM_ID,
+                    getIntent().getStringExtra(RestaurantDetailFragment.ARG_ITEM_ID));
             RestaurantDetailFragment fragment = new RestaurantDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
@@ -60,24 +63,25 @@ public class RestaurantDetailActivity extends AppCompatActivity {
     }
 
     public void editDialog() {
-        final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setTitle("Edit your favorite restaurant");
-        alertDialogBuilder.setMessage("Are you going to edit this?");
-        final EditText input = new EditText(this);
-        alertDialogBuilder.setView(input);
-        alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                // Intent i = new Intent(getContext(), ItemSelection.class);
-                // startActivity(i);
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.custom_dialog);
+        dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+        dialog.setCancelable(false);
+        dialog.setTitle("Edit your favorite restaurant");
+
+        final EditText title = (EditText) dialog.findViewById(R.id.title);
+        //title.setText("");
+        final EditText content = (EditText) dialog.findViewById(R.id.content);
+        //content.setText("");
+        final Button checkButton = (Button) dialog.findViewById(R.id.checkButton);
+        checkButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //
+                dialog.dismiss();
             }
         });
-        alertDialogBuilder.setNegativeButton("Cancel",new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                dialog.cancel();
-            }
-        });
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
     }
 
     public void deleteDialog() {

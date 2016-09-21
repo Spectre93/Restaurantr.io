@@ -1,14 +1,25 @@
 package nl.verhoogenvansetten.restaurantrio;
 
+import android.app.Activity;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.support.design.widget.FloatingActionButton;
+import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,11 +27,18 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.appindexing.Thing;
+import com.google.android.gms.common.api.GoogleApiClient;
 
+import java.io.ByteArrayOutputStream;
 import java.util.List;
+
+import nl.verhoogenvansetten.restaurantrio.model.Restaurant;
 
 /**
  * An activity representing a list of Restaurants. This activity
@@ -34,6 +52,17 @@ public class RestaurantListActivity extends AppCompatActivity {
 
     // Whether or not the activity is in two-pane mode, i.e. running on a tablet device.
     private boolean mTwoPane;
+    private Uri fileUri;
+    String picturePath;
+    Uri selectedImage;
+    Bitmap photo;
+    String ba1;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
+    //public static String URL = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +91,9 @@ public class RestaurantListActivity extends AppCompatActivity {
         if (findViewById(R.id.restaurant_detail_container) != null) {
             mTwoPane = true;
         }
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     public void addDialog() {
@@ -75,12 +107,13 @@ public class RestaurantListActivity extends AppCompatActivity {
         final EditText title = (EditText) dialog.findViewById(R.id.title);
         title.setHint("Put the name of restaurant");
         final EditText content = (EditText) dialog.findViewById(R.id.content);
-        title.setHint("Explaining about the restaurant");
+        content.setHint("Explaining about the restaurant");
 
         final Button checkButton = (Button) dialog.findViewById(R.id.checkButton);
         checkButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //
                 dialog.dismiss();
             }
         });
@@ -95,9 +128,9 @@ public class RestaurantListActivity extends AppCompatActivity {
     public class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
-        private final List<RestaurantListContent.RestaurantItem> mValues;
+        private final List<Restaurant> mValues;
 
-        public SimpleItemRecyclerViewAdapter(List<RestaurantListContent.RestaurantItem> items) {
+        public SimpleItemRecyclerViewAdapter(List<Restaurant> items) {
             mValues = items;
         }
 
@@ -111,15 +144,15 @@ public class RestaurantListActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
             holder.mItem = mValues.get(position);
-            holder.mNameView.setText(mValues.get(position).name);
-            holder.mLocationView.setText(mValues.get(position).location);
+            holder.mNameView.setText(mValues.get(position).getName());
+            holder.mLocationView.setText(mValues.get(position).getLocation());
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (mTwoPane) {
                         Bundle arguments = new Bundle();
-                        arguments.putString(RestaurantDetailFragment.ARG_ITEM_NAME, holder.mItem.name);
+                        arguments.putLong(RestaurantDetailFragment.ARG_ITEM_ID, holder.mItem.getId());
                         RestaurantDetailFragment fragment = new RestaurantDetailFragment();
                         fragment.setArguments(arguments);
                         getSupportFragmentManager().beginTransaction()
@@ -128,7 +161,7 @@ public class RestaurantListActivity extends AppCompatActivity {
                     } else {
                         Context context = v.getContext();
                         Intent intent = new Intent(context, RestaurantDetailActivity.class);
-                        intent.putExtra(RestaurantDetailFragment.ARG_ITEM_NAME, holder.mItem.name);
+                        intent.putExtra(RestaurantDetailFragment.ARG_ITEM_ID, holder.mItem.getId());
 
                         context.startActivity(intent);
                     }
@@ -145,7 +178,7 @@ public class RestaurantListActivity extends AppCompatActivity {
             public final View mView;
             public final TextView mNameView;
             public final TextView mLocationView;
-            public RestaurantListContent.RestaurantItem mItem;
+            public Restaurant mItem;
 
             public ViewHolder(View view) {
                 super(view);
