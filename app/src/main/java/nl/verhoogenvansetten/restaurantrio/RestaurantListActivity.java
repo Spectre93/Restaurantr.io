@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -44,6 +45,7 @@ public class RestaurantListActivity extends AppCompatActivity implements AddEdit
 
     // Whether or not the activity is in two-pane mode, i.e. running on a tablet device.
     private boolean mTwoPane;
+    private SimpleItemRecyclerViewAdapter adapter;
     private Uri fileUri;
     String picturePath;
     Uri selectedImage;
@@ -96,7 +98,8 @@ public class RestaurantListActivity extends AppCompatActivity implements AddEdit
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(RestaurantListContent.ITEMS));
+        adapter = new SimpleItemRecyclerViewAdapter(RestaurantListContent.ITEMS);
+        recyclerView.setAdapter(adapter);
     }
 
     @Override
@@ -118,11 +121,12 @@ public class RestaurantListActivity extends AppCompatActivity implements AddEdit
 
     @Override
     public boolean onQueryTextChange(String text) {
-        ArrayList<Restaurant> res = DatabaseHelper.getRestaurantList(text);
-        Toast.makeText(this, String.valueOf(res.size()), Toast.LENGTH_SHORT).show();
-        if (res.size() != 0) {
-
-        }
+        List<Restaurant> res;
+        if (text.length() > 0)
+            res = DatabaseHelper.getRestaurantList(text);
+        else
+            res = DatabaseHelper.getRestaurantList();
+        adapter.setFilter(res);
         return true;
     }
 
@@ -146,7 +150,7 @@ public class RestaurantListActivity extends AppCompatActivity implements AddEdit
 
     public class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
-        private final List<Restaurant> mValues;
+        private List<Restaurant> mValues;
 
         public SimpleItemRecyclerViewAdapter(List<Restaurant> items) {
             mValues = items;
@@ -209,6 +213,12 @@ public class RestaurantListActivity extends AppCompatActivity implements AddEdit
             public String toString() {
                 return super.toString() + " '" + mLocationView.getText() + "'";
             }
+        }
+
+        public void setFilter(List<Restaurant> restaurants) {
+            mValues.clear();
+            mValues.addAll(restaurants);
+            notifyDataSetChanged();
         }
     }
 }
