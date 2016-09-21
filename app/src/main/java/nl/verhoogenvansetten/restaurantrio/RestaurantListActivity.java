@@ -41,6 +41,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 import nl.verhoogenvansetten.restaurantrio.model.Restaurant;
+import nl.verhoogenvansetten.restaurantrio.util.DatabaseHelper;
 
 /**
  * An activity representing a list of Restaurants. This activity
@@ -70,6 +71,8 @@ public class RestaurantListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restaurant_list);
+        //Initialize the database with the current context.
+        DatabaseHelper.initDatabase(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
