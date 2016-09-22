@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -60,6 +61,8 @@ public class RestaurantListActivity extends AppCompatActivity implements AddEdit
     private GoogleApiClient client;
     //public static String URL = "";
 
+    View.OnClickListener mOnClickListener;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,13 +103,23 @@ public class RestaurantListActivity extends AppCompatActivity implements AddEdit
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                RestaurantListActivity.SimpleItemRecyclerViewAdapter.ViewHolder test = ( RestaurantListActivity.SimpleItemRecyclerViewAdapter.ViewHolder) viewHolder;
+                final RestaurantListActivity.SimpleItemRecyclerViewAdapter.ViewHolder test = ( RestaurantListActivity.SimpleItemRecyclerViewAdapter.ViewHolder) viewHolder;
                 RestaurantListContent.ITEMS.remove(test.mItem);
                 RestaurantListContent.ITEM_MAP.remove(test.mItem.getId());
                 DatabaseHelper.deleteRestaurant(test.mItem.getId());
                 adapter.notifyItemRemoved(viewHolder.getAdapterPosition());
+
+                Snackbar.make(findViewById(R.id.fab), "Deleted item", Snackbar.LENGTH_LONG)
+                        .setAction("Undo", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                RestaurantListContent.addItem(new Restaurant(RestaurantListActivity.this, test.mItem.getName(), test.mItem.getLocation(), test.mItem.getDescription(), test.mItem.getImage()));
+                                RestaurantListActivity.adapter.setFilter(DatabaseHelper.getRestaurantList());
+                            }
+                        }).show();
             }
         });
+
         helper.attachToRecyclerView((RecyclerView)recyclerView);
 
         // Detail container view will only be present on large layouts
