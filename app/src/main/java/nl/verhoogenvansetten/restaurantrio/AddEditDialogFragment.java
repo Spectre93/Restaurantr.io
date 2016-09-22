@@ -161,7 +161,7 @@ public class AddEditDialogFragment extends DialogFragment {
                 final String name = ((TextInputEditText) getDialog().findViewById(R.id.etxt_restaurant_name)).getText().toString();
                 final String location = ((TextInputEditText) getDialog().findViewById(R.id.etxt_restaurant_location)).getText().toString();
                 final String description = ((TextInputEditText) getDialog().findViewById(R.id.etxt_restaurant_description)).getText().toString();
-                final Bitmap image = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+                final Bitmap image = ((BitmapDrawable) imageView.getDrawable()).getBitmap();//todo throws nullpointerexception when the image is not set. See line 152-153.
 
                 if (isEdit) {
                     RestaurantListContent.updateItem(new Restaurant(mId, name, location, description, image));
