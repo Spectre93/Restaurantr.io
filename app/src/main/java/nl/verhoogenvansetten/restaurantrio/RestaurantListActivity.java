@@ -14,6 +14,8 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
+import android.support.v7.widget.helper.ItemTouchHelper.SimpleCallback;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -87,6 +89,25 @@ public class RestaurantListActivity extends AppCompatActivity implements AddEdit
         View recyclerView = findViewById(R.id.restaurant_list);
         assert recyclerView != null;
         setupRecyclerView((RecyclerView) recyclerView);
+
+        ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(
+                ItemTouchHelper.END, ItemTouchHelper.END) {
+            @Override
+            public boolean onMove(RecyclerView recyclerView,
+                                  RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return true;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                RestaurantListActivity.SimpleItemRecyclerViewAdapter.ViewHolder test = ( RestaurantListActivity.SimpleItemRecyclerViewAdapter.ViewHolder) viewHolder;
+                RestaurantListContent.ITEMS.remove(test.mItem);
+                RestaurantListContent.ITEM_MAP.remove(test.mItem.getId());
+                DatabaseHelper.deleteRestaurant(test.mItem.getId());
+                adapter.notifyItemRemoved(viewHolder.getAdapterPosition());
+            }
+        });
+        helper.attachToRecyclerView((RecyclerView)recyclerView);
 
         // Detail container view will only be present on large layouts
         if (findViewById(R.id.restaurant_detail_container) != null) {
