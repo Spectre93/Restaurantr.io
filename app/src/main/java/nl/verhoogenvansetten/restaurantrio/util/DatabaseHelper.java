@@ -55,7 +55,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public static Restaurant getRestaurantById(int restaurantId){
+    public static Restaurant getRestaurantById(long restaurantId){
         Restaurant restaurant;
         String[] columns = {
                 COLUMN_RESTAURANT_ID,
@@ -65,7 +65,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 COLUMN_RESTAURANT_IMAGE
         };
         String whereClause = COLUMN_RESTAURANT_ID + " = ?";
-        String[] whereArgs = new String[]{ Integer.toString(restaurantId) };
+        String[] whereArgs = new String[]{ Long.toString(restaurantId) };
         Cursor cursor = db.query(
                 TABLE_RESTAURANT,   //Table
                 columns,            //Columns to be selected
@@ -161,22 +161,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return restaurants;
     }
 
-    public static boolean editRestaurant(int id, String name, String location, String description, Bitmap image){
+    public static boolean editRestaurant(long id, String name, String location, String description, Bitmap image){
         ContentValues contentValues = new ContentValues();
         contentValues.put(COLUMN_RESTAURANT_NAME, name);
         contentValues.put(COLUMN_RESTAURANT_LOCATION, location);
         contentValues.put(COLUMN_RESTAURANT_DESCRIPTION, description);
         contentValues.put(COLUMN_RESTAURANT_IMAGE, DbBitmapUtility.getBytes(image));
         String whereClause = COLUMN_RESTAURANT_ID + " = ?";
-        String[] whereArgs = new String[]{ Integer.toString(id) };
+        String[] whereArgs = new String[]{ Long.toString(id) };
         int result = db.update(TABLE_RESTAURANT, contentValues, whereClause, whereArgs);
         //If the amount of rows updated is 1 return true
         return result == 1;
     }
 
-    public static boolean deleteRestaurant(int id) {
+    public static boolean deleteRestaurant(long id) {
         String whereClause = COLUMN_RESTAURANT_ID + " = ?";
-        String[] whereArgs = new String[]{ Integer.toString(id) };
+        String[] whereArgs = new String[]{ Long.toString(id) };
         int result = db.delete(TABLE_RESTAURANT, whereClause, whereArgs);
         return result == 1;
     }

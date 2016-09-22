@@ -12,7 +12,7 @@ class RestaurantListContent {
     // The array of restaurants
     static final List<Restaurant> ITEMS = new ArrayList<>();
     // A map of sample (dummy) items, by ID.
-    static final Map<Long, Restaurant> ITEM_MAP = new HashMap<Long, Restaurant>();
+    static final Map<Long, Restaurant> ITEM_MAP = new HashMap<>();
     private static final String TAG = "RestaurantListContent";
 
     static {
@@ -22,8 +22,16 @@ class RestaurantListContent {
         }
     }
 
-    private static void addItem(Restaurant item) {
+    static void addItem(Restaurant item) {
         ITEMS.add(item);
         ITEM_MAP.put(item.getId(), item);
+    }
+
+    static void updateItem(Restaurant item) {
+        ITEM_MAP.put(item.getId(), item);
+        for (int i = 0; i < ITEMS.size(); i++) {
+            if (ITEMS.get(i).getId() == item.getId())
+                ITEMS.set(i, item);
+        }
     }
 }

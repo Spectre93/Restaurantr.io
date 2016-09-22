@@ -1,9 +1,12 @@
 package nl.verhoogenvansetten.restaurantrio;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -32,6 +35,7 @@ public class RestaurantDetailActivity extends AppCompatActivity implements AddEd
         setSupportActionBar(toolbar);
 
         Restaurant rest = RestaurantListContent.ITEM_MAP.get(getIntent().getLongExtra(RestaurantDetailFragment.ARG_ITEM_ID, -1));
+        final long id = rest.getId();
         final String name = rest.getName();
         final String location = rest.getLocation();
         final String description = rest.getDescription();
@@ -44,7 +48,7 @@ public class RestaurantDetailActivity extends AppCompatActivity implements AddEd
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DialogUtil.openEditDialog(getSupportFragmentManager(), getString(R.string.new_restaurant), name, location, description, image);
+                DialogUtil.openEditDialog(getSupportFragmentManager(), id, getString(R.string.new_restaurant), name, location, description, image);
             }
         });
 
@@ -63,9 +67,16 @@ public class RestaurantDetailActivity extends AppCompatActivity implements AddEd
             RestaurantDetailFragment fragment = new RestaurantDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.restaurant_detail_container, fragment)
+                    .add(R.id.restaurant_detail_container, fragment, "detail_fragment")
                     .commit();
         }
+    }
+
+    public void updateUI(String name, String location, String description, Bitmap image) {
+        ivToolbarImage.setImageBitmap(image);
+        RestaurantDetailFragment frg;
+        frg = (RestaurantDetailFragment) getSupportFragmentManager().findFragmentByTag("detail_fragment");
+        frg.updateUI(name, location, description);
     }
 
     @Override

@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -25,6 +26,7 @@ import android.widget.TextView;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import nl.verhoogenvansetten.restaurantrio.model.Restaurant;
@@ -47,7 +49,7 @@ public class RestaurantListActivity extends AppCompatActivity implements AddEdit
     String ba1;
     // Whether or not the activity is in two-pane mode, i.e. running on a tablet device.
     private boolean mTwoPane;
-    private SimpleItemRecyclerViewAdapter adapter;
+    public static SimpleItemRecyclerViewAdapter adapter;
     private Uri fileUri;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -78,7 +80,7 @@ public class RestaurantListActivity extends AppCompatActivity implements AddEdit
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DialogUtil.openAddDialog(getSupportFragmentManager(), getString(R.string.new_restaurant), adapter);
+                DialogUtil.openAddDialog(getSupportFragmentManager(), getString(R.string.new_restaurant));
             }
         });
 
@@ -103,7 +105,9 @@ public class RestaurantListActivity extends AppCompatActivity implements AddEdit
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
         adapter = new SimpleItemRecyclerViewAdapter(RestaurantListContent.ITEMS);
+        recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
     }
 
     @Override
@@ -154,7 +158,7 @@ public class RestaurantListActivity extends AppCompatActivity implements AddEdit
 
     public class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
-        private List<Restaurant> mValues;
+        private List<Restaurant> mValues = new ArrayList<>();
 
         SimpleItemRecyclerViewAdapter(List<Restaurant> items) {
             mValues = items;

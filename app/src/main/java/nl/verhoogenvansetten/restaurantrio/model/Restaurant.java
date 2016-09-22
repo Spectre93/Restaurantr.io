@@ -42,7 +42,7 @@ public class Restaurant{
     }
 
     //Constructor which is used to load existing restaurant objects from the DB.
-    public Restaurant(int id, String name, String location, String description, Bitmap image) {
+    public Restaurant(long id, String name, String location, String description, Bitmap image) {
         this.id = id;
         this.name = name;
         this.location = location;

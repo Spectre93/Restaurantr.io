@@ -18,6 +18,8 @@ import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +34,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import nl.verhoogenvansetten.restaurantrio.model.Restaurant;
 import nl.verhoogenvansetten.restaurantrio.util.DatabaseHelper;
 import nl.verhoogenvansetten.restaurantrio.util.DbBitmapUtility;
 
@@ -49,19 +52,19 @@ public class AddEditDialogFragment extends DialogFragment {
 
     public AddEditDialogFragment() {}
 
-    public static AddEditDialogFragment newInstance(String title, boolean isEdit, RestaurantListActivity.SimpleItemRecyclerViewAdapter adapter) {
+    public static AddEditDialogFragment newInstance(String title, boolean isEdit) {
         AddEditDialogFragment frag = new AddEditDialogFragment();
         Bundle args = new Bundle();
         args.putString("title", title);
-        AddEditDialogFragment.adapter = adapter;
         AddEditDialogFragment.isEdit = isEdit;
         frag.setArguments(args);
         return frag;
     }
 
-    public static AddEditDialogFragment newInstance(String title, String name, String location, String description, byte[] image, boolean isEdit) {
+    public static AddEditDialogFragment newInstance(long id, String title, String name, String location, String description, byte[] image, boolean isEdit) {
         AddEditDialogFragment frag = new AddEditDialogFragment();
         Bundle args = new Bundle();
+        args.putLong("id", id);
         args.putString("title", title);
         args.putString("name", name);
         args.putString("location", location);
@@ -149,6 +152,7 @@ public class AddEditDialogFragment extends DialogFragment {
         if ((mImage = args.getByteArray("image")) != null)
             imageView.setImageBitmap(DbBitmapUtility.getImage(mImage));
 
+        final long mId = args.getLong("id");
 
         // Add action buttons
         builder.setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
@@ -160,11 +164,13 @@ public class AddEditDialogFragment extends DialogFragment {
                 final Bitmap image = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
 
                 if (isEdit) {
-                    DatabaseHelper.editRestaurant(1, name, location, description, image);
+                    RestaurantListContent.updateItem(new Restaurant(mId, name, location, description, image));
+                    DatabaseHelper.editRestaurant(mId, name, location, description, image);
+                    updateUI(name, location, description, image);
                 } else {
-                    DatabaseHelper.addRestaurant(name, location, description, image);
+                    RestaurantListContent.addItem(new Restaurant(getContext(), name, location, description, image));
                 }
-                adapter.setFilter(DatabaseHelper.getRestaurantList());
+                RestaurantListActivity.adapter.setFilter(DatabaseHelper.getRestaurantList());
             }
         });
 
@@ -174,6 +180,11 @@ public class AddEditDialogFragment extends DialogFragment {
             }
         });
         return builder.create();
+    }
+
+    private void updateUI(String name, String location, String description, Bitmap image) {
+        RestaurantDetailActivity activity = (RestaurantDetailActivity) getActivity();
+        activity.updateUI(name, location, description, image);
     }
 
     private void openImageIntent() {
