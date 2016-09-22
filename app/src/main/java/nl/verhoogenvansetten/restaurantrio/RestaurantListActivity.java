@@ -107,7 +107,7 @@ public class RestaurantListActivity extends AppCompatActivity implements AddEdit
         adapter = new SimpleItemRecyclerViewAdapter(RestaurantListContent.ITEMS);
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
     }
 
     @Override

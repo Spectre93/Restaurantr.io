@@ -8,4 +8,6 @@
     android:layout_height="match_parent"
     app:layoutManager="LinearLayoutManager"
     tools:context="nl.verhoogenvansetten.restaurantrio.RestaurantListActivity"
-    tools:listitem="@layout/restaurant_list_content" />
+    tools:listitem="@layout/restaurant_list_content"
+    android:paddingTop="4dp"
+    android:paddingBottom="4dp"/>

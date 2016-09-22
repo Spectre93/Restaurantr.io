@@ -37,8 +37,6 @@ public class RestaurantDetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Toast.makeText(getActivity(), getTag(), Toast.LENGTH_SHORT).show();
-
         if (getArguments().containsKey(ARG_ITEM_ID)) {
             // Load the content specified by the fragment arguments.
             mItem = RestaurantListContent.ITEM_MAP.get(getArguments().getLong(ARG_ITEM_ID));
